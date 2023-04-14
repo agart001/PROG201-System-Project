@@ -6,7 +6,8 @@
       xmlns:local="clr-namespace:PROG201_System_Project.pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="game_page">
+      Title="game_page"
+      Loaded="Page_Loaded">
 
     <Grid Background="#FF907F7F">
         <Grid.ColumnDefinitions>
@@ -92,8 +93,7 @@
                     <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
 
-                <TextBlock x:Name="tb_char" Grid.Column="20" Grid.Row="10" Background="#FF292424" />
-                <TextBlock x:Name="tb_char1" Grid.Column="21" Grid.Row="10" Background="#FF292424" />
+                <TextBlock x:Name="tb_char" Grid.Column="20" Grid.Row="10" Background="#FF6AC27F" />
 
             </Grid>
         </Border>

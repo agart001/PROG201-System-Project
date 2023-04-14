@@ -26,6 +26,13 @@ namespace PROG201_System_Project.pages
             InitializeComponent();
         }
 
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            Moth m = new Moth();
+            MainWindow.UI.SpawnGridActor(grd_Board, m.Sprite, 10, 10);
+
+        }
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
 

@@ -26,18 +26,26 @@ namespace PROG201_System_Project
             main.Source = uri;
         }
 
-        public void MoveGridActor(Grid grid, TextBlock textblock, int move_y, int move_x)
+        public void SpawnGridActor(Grid grid, TextBlock sprite, int spawn_y, int spawn_x)
         {
-            int cur_y = Grid.GetRow(textblock);
-            int cur_x = Grid.GetColumn(textblock);
+            Grid.SetRow(sprite, spawn_y);
+            Grid.SetColumn(sprite, spawn_x);
+
+            grid.Children.Add(sprite);
+        }
+
+        public void MoveGridActor(Grid grid, TextBlock sprite, int move_y, int move_x)
+        {
+            int cur_y = Grid.GetRow(sprite);
+            int cur_x = Grid.GetColumn(sprite);
 
             int final_x = cur_x + move_x;
             int final_y = cur_y + move_y;
 
-            if (CheckGridCollision(grid, final_x, final_y) != null) return;
+            ///if (CheckGridCollision(grid, final_x, final_y) != null) return;
 
-            Grid.SetRow(textblock, final_y);
-            Grid.SetColumn(textblock, final_x);
+            Grid.SetRow(sprite, final_y);
+            Grid.SetColumn(sprite, final_x);
         }
 
         public UIElement CheckGridCollision(Grid grid, int y, int x)
