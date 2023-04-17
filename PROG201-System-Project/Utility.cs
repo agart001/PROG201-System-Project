@@ -25,7 +25,7 @@ namespace PROG201_System_Project
 
         public static BitmapImage ImageFromString(string str)
         {
-            string path = $"images/spr_{str}.BMP";
+            string path = $"/../images/{str}.BMP";
             Uri uri = new Uri(path, UriKind.Relative);
             BitmapImage image = new BitmapImage(uri);
             return image;

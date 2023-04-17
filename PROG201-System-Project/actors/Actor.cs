@@ -11,9 +11,10 @@ namespace PROG201_System_Project
 {
     public class Actor
     {
-        public Image Sprite { get; set; }
+        public Image Sprite = new Image();
+        
 
-        public string ImageFile { get; set; }
+        public string ImageFile = "default";
 
         public virtual string SpriteColor { get; set; }
 

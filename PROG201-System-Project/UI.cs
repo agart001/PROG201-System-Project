@@ -26,7 +26,7 @@ namespace PROG201_System_Project
             main.Source = uri;
         }
 
-        public void SpawnGridActor(Grid grid, TextBlock sprite, int spawn_y, int spawn_x)
+        public void SpawnGridActor(Grid grid, Image sprite, int spawn_y, int spawn_x)
         {
             Grid.SetRow(sprite, spawn_y);
             Grid.SetColumn(sprite, spawn_x);
@@ -34,7 +34,7 @@ namespace PROG201_System_Project
             grid.Children.Add(sprite);
         }
 
-        public void MoveGridActor(Grid grid, TextBlock sprite, int move_y, int move_x)
+        public void MoveGridActor(Grid grid, Image sprite, int move_y, int move_x)
         {
             int cur_y = Grid.GetRow(sprite);
             int cur_x = Grid.GetColumn(sprite);
