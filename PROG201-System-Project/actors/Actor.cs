@@ -11,7 +11,9 @@ namespace PROG201_System_Project
 {
     public class Actor
     {
-        public TextBlock Sprite = new TextBlock();
+        public Image Sprite { get; set; }
+
+        public string ImageFile { get; set; }
 
         public virtual string SpriteColor { get; set; }
 
@@ -29,7 +31,7 @@ namespace PROG201_System_Project
         {
             PreContruct();
 
-            Sprite.Background = BrushFromString(SpriteColor);
+            Sprite.Source = ImageFromString(ImageFile);
 
             PostContruct();
         }

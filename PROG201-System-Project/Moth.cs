@@ -12,7 +12,7 @@ namespace PROG201_System_Project
 
         public override void PreContruct()
         {
-            SpriteColor = "#FF292424";
+            ImageFile = "default";
         }
 
         public override void PostContruct()

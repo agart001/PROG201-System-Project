@@ -95,6 +95,8 @@
 
                 <TextBlock x:Name="tb_char" Grid.Column="20" Grid.Row="10" Background="#FF6AC27F" />
 
+                <Image Grid.Column="5" Grid.Row="10" Source="/images/spr_default.BMP" Stretch="Fill"/>
+
             </Grid>
         </Border>
 

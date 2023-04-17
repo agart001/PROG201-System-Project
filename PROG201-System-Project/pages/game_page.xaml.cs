@@ -21,6 +21,7 @@ namespace PROG201_System_Project.pages
     /// </summary>
     public partial class game_page : Page
     {
+        Moth m = new Moth();
         public game_page()
         {
             InitializeComponent();
@@ -28,7 +29,6 @@ namespace PROG201_System_Project.pages
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            Moth m = new Moth();
             MainWindow.UI.SpawnGridActor(grd_Board, m.Sprite, 10, 10);
 
         }

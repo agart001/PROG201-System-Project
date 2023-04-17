@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace PROG201_System_Project
 {
@@ -20,6 +21,14 @@ namespace PROG201_System_Project
             BrushConverter converter = new BrushConverter();
             Brush brush = (Brush)converter.ConvertFromString(str);
             return brush;
+        }
+
+        public static BitmapImage ImageFromString(string str)
+        {
+            string path = $"images/spr_{str}.BMP";
+            Uri uri = new Uri(path, UriKind.Relative);
+            BitmapImage image = new BitmapImage(uri);
+            return image;
         }
     }
 }
