@@ -9,10 +9,12 @@ using System.Windows;
 using PROG201_System_Project.actors.landscapes;
 using System.Windows.Media.Imaging;
 using static PROG201_System_Project.Utility;
+using System.Numerics;
+using PROG201_System_Project.actors.plants;
 
 namespace PROG201_System_Project.actors.creatures
 {
-    internal class Creature : Actor, IMove
+    internal class Creature : Actor, IMove, IFood
     {
 
         public enum VoreType
@@ -27,21 +29,35 @@ namespace PROG201_System_Project.actors.creatures
 
         public bool Alive { get; set; }
 
+        public int MaxMovement { get; set; }
+
         public int MaxHealth { get; set; }
         public double Health { get; set; }
         public int AttackDamage { get; set; }
 
-
+        public bool Thirsty { get; set; }
         public int MaxHydration { get; set; }
         public double Hydration { get; set; }
         public double HydrationMR { get; set; }
         public int WaterIntake { get; set; }
         Water NearestWater { get; set; }
 
+        public bool Hungery { get; set; }
         public int MaxHunger { get; set; }
         public double Hunger { get; set; }
         public double HungerMR { get; set; }
-        public int CalorieIntake { get; set; }
+        public IFood PreferredFood { get; set; }
+        IFood NearestFood { get; set; }
+
+
+        #region IFood
+
+        private int calories;
+        private bool eaten;
+
+        public int Calories { get => calories; set => calories = value; }
+        public bool Eaten { get => eaten; set => eaten = value; }
+        #endregion
 
         #region IMove
         public void MoveGridActor(Grid grid, Image sprite, int move_y, int move_x)
@@ -66,6 +82,45 @@ namespace PROG201_System_Project.actors.creatures
         }
         #endregion
 
+        #region Checks
+
+        void CheckThrist()
+        {
+            if(Hydration < MaxHydration)
+            {
+                Thirsty = true;
+            }
+        }
+        void CheckHunger()
+        {
+            if (Hunger < MaxHunger)
+            {
+                Hungery = true;
+            }
+        }
+
+        void CheckEaten()
+        {
+            if (Eaten) Alive = false;
+        }
+
+        void CheckAlive(Grid grid)
+        {
+            if (!Alive)
+            {
+                grid.Children.Remove(Sprite);
+            }
+        }
+
+        void CheckStatus()
+        {
+            CheckEaten();
+
+            CheckThrist();
+            CheckHunger();
+        }
+        #endregion
+
         #region Pathing
         public void FindNearestWater(Grid grid, Dictionary<Image, Actor> actors)
         {
@@ -81,11 +136,12 @@ namespace PROG201_System_Project.actors.creatures
             foreach(Image watersprite in watersprites)
             {
                 Water water = (Water)actors[watersprite];
-                distances[index] = (int)DistanceToActor(water).Length;
+                distances[index] = Math.Abs((int)DistanceToActor(water).Length());
                 index++;
             }
 
-            int smallestdist = distances.Min();
+            int[] travelabledistances = distances.Where(i => i <= MaxMovement).ToArray();
+            int smallestdist = travelabledistances.Min();
             int smallestindex = distances.ToList().FindIndex(i=> i == smallestdist);
             Image smallestsprite = watersprites[smallestindex];
             NearestWater = (Water)actors[smallestsprite];
@@ -94,64 +150,142 @@ namespace PROG201_System_Project.actors.creatures
 
         }
 
-        public void MoveToWater()
+        public void FindNearestFood(Grid grid, Dictionary<Image, Actor> actors)
         {
-           
+            GetCurrentPosition();
+
+            //BitmapImage waterbmp = new BitmapImage(new Uri("{pack://application:,,,/images/water.BMP}"));
+            Actor FoodActor = PreferredFood as Actor;
+            List<Image> images = grid.Children.Cast<Image>().ToList();
+            List<Image> foodsprites = images.FindAll(i => ImageFileFromPath(i.Source.ToString()) == ImageFileFromPath(FoodActor.Sprite.Source.ToString()));
+
+            int[] distances = new int[foodsprites.Count];
+            int index = 0;
+            foreach (Image watersprite in foodsprites)
+            {
+                IFood food = (IFood)actors[watersprite];
+                distances[index] = Math.Abs((int)DistanceToActor(food as Actor).Length());
+                index++;
+            }
+
+            int[] travelabledistances = distances.Where(i => i <= MaxMovement).ToArray();
+            int smallestdist = travelabledistances.Min();
+            int smallestindex = distances.ToList().FindIndex(i => i == smallestdist);
+            Image smallestsprite = foodsprites[smallestindex];
+            NearestFood = (IFood)actors[smallestsprite];
+
+            MessageBox.Show("Dist: " + smallestdist);
+
+        }
+
+        public void MoveToWater(Grid grid, Dictionary<Image, Actor> actors)
+        {
+            FindNearestWater(grid, actors);
+
+            Vector2 vectowater = DistanceToActor(NearestWater);
+
+            MoveGridActor(grid, Sprite, (int)vectowater.Y, (int)vectowater.X);
+
+            Drink(NearestWater);
+
+            int B = 5;
+        }
+
+        public void MoveToFood(Grid grid, Dictionary<Image, Actor> actors)
+        {
+            FindNearestFood(grid, actors);
+
+            Vector2 vectofood = DistanceToActor(NearestFood as Actor);
+
+            MoveGridActor(grid, Sprite, (int)vectofood.Y, (int)vectofood.X);
+
+            Eat(NearestFood);
+
+            int B = 5;
+        }
+
+        public void MoveRandom(Grid grid)
+        {
+            int rand_y = Rand.Next(-MaxMovement, MaxMovement);
+            int rand_x = Rand.Next(-MaxMovement, MaxMovement);
+
+            Vector2 vec = new Vector2(rand_y, rand_x);
+            int MaxHypot = GetHypotenuse(MaxMovement, MaxMovement);
+
+            if(vec.Length() == MaxHypot)
+            {
+                rand_y = Rand.Next(-MaxMovement, MaxMovement);
+                rand_x = Rand.Next(-MaxMovement, MaxMovement);
+            }
+
+
+            MoveGridActor(grid, Sprite, rand_y, rand_x);
         }
 
         #endregion
 
-
         #region Eat & Drink
-        public void Drink(Landscape enviroment)
+        public void Drink(Water water)
         {
-            if (enviroment.WaterDepleted != true)
+            if (water.WaterDepleted != true)
             {
-                enviroment.WaterLevel -= WaterIntake;
-                enviroment.CheckDepletion();
+                if(Hydration < MaxHydration)
+                {
+                    water.WaterLevel -= WaterIntake;
+                    Hydration += WaterIntake;
+                }
+                water.CheckDepletion();
             }
         }
 
-        public void Eat(Landscape enviroment, Creature creature)
+        public void Eat(IFood food)
         {
             switch (Vore)
             {
                 case VoreType.Herbivore:
-                    if (enviroment != null)
-                    {
-                        EatVegetation(enviroment);
-                    }
+                    EatVegetation(food);
                     break;
                 case VoreType.Carnivore:
-                    if (creature != null)
-                    {
-                        EatCreature(creature);
-                    }
+                    EatCreature(food);
                     break;
             }
         }
 
-        void EatCreature(Creature creature)
+        void EatCreature(IFood food)
         {
+            Creature creature = food as Creature;
             if (creature.Health - AttackDamage >= 0)
             {
-                creature.Alive = false;
-                Hunger += CalorieIntake;
+                creature.Eaten = true;
+                Hunger += creature.Calories;
             }
             else
             {
                 creature.Health -= AttackDamage;
             }
+
+            CheckEaten();
         }
 
-        void EatVegetation(Landscape enviroment)
+        void EatVegetation(IFood food)
         {
-            if (enviroment.VegetationDepleted != true)
+            Plant plant = food as Plant;
+            if(plant.Eaten != true)
             {
-                enviroment.VegetationLevel -= CalorieIntake;
-                enviroment.CheckDepletion();
+                plant.FruitAmount -= 1;
+                Hunger += plant.Calories;
             }
         }
         #endregion
+
+        public override void TickAction(Grid grid)
+        {
+            CheckStatus();
+            CheckAlive(grid);
+
+            if (!Alive) return;
+
+
+        }
     }
 }

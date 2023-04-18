@@ -1,4 +1,5 @@
-﻿using PROG201_System_Project.interfaces;
+﻿using PROG201_System_Project.actors.plants;
+using PROG201_System_Project.interfaces;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -17,8 +18,11 @@ namespace PROG201_System_Project.actors.creatures
 
         public override void PostContruct()
         {
-            Vore = VoreType.Carnivore;
+            Vore = VoreType.Herbivore;
+
             Alive = true;
+
+            MaxMovement = 5;
 
             MaxHealth = 15;
             Health = 15;
@@ -32,7 +36,10 @@ namespace PROG201_System_Project.actors.creatures
             MaxHunger = 20;
             Hunger = 15;
             HungerMR = .25;
-            CalorieIntake = 2;
+            PreferredFood = new Yucca();
+
+            Calories = 5;
+            Eaten = false;
         }
 
 

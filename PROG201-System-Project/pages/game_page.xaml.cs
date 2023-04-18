@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using PROG201_System_Project.actors.creatures;
 using PROG201_System_Project.actors.landscapes;
+using PROG201_System_Project.actors.plants;
 using static PROG201_System_Project.Utility;
 
 namespace PROG201_System_Project.pages
@@ -28,12 +29,17 @@ namespace PROG201_System_Project.pages
         Moth m;
 
         Water w;
+        Water w2;
+
+        Yucca y;
         public game_page()
         {
             InitializeComponent();
 
             m = new Moth();
             w = new Water();
+            w2 = new Water();
+            y = new Yucca();
 
             Actors = new Dictionary<Image, Actor>();
         }
@@ -42,14 +48,27 @@ namespace PROG201_System_Project.pages
         {
             Image img = m.Sprite;
 
+            w2.SpawnGridActor(grd_Board, Actors, 12, 15);
             w.SpawnGridActor(grd_Board,Actors, 10, 12);
+
+            y.SpawnGridActor(grd_Board, Actors, 12, 20);
+
             m.SpawnGridActor(grd_Board,Actors, 14, 18);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            m.FindNearestWater(grd_Board, Actors);
-            m.MoveGridActor(grd_Board, m.Sprite, 0, 1);
+            m.MoveToFood(grd_Board, Actors);
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            m.MoveToWater(grd_Board, Actors);
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            m.MoveRandom(grd_Board);
         }
     }
 }

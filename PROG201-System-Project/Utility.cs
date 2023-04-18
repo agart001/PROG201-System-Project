@@ -16,6 +16,8 @@ namespace PROG201_System_Project
 
         public static void CloseApp() => Environment.Exit(0);
 
+        public static int GetHypotenuse(int a, int b) => (int)Math.Sqrt(Math.Pow(a, 2) + Math.Pow(b, 2));
+
         public static Brush BrushFromString(string str)
         {
             BrushConverter converter = new BrushConverter();

@@ -1,11 +1,16 @@
-﻿using PROG201_System_Project.interfaces;
+﻿using PROG201_System_Project.actors.creatures;
+using PROG201_System_Project.actors.landscapes;
+using PROG201_System_Project.actors.plants;
+using PROG201_System_Project.interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using static PROG201_System_Project.Utility;
 
@@ -41,6 +46,11 @@ namespace PROG201_System_Project
             PostContruct();
         }
 
+        public virtual void TickAction(Grid grid)
+        {
+
+        }
+
         public void GetCurrentPosition()
         {
             Grid_Y = Grid.GetRow(this.Sprite);
@@ -58,12 +68,46 @@ namespace PROG201_System_Project
             GetCurrentPosition();
         }
 
-        public Vector DistanceToActor(Actor actor)
+        public Vector2 DistanceToActor(Actor actor)
         {
-            Vector vector = new Vector();
-            vector.X = Math.Abs((actor.Grid_X - this.Grid_X));
-            vector.Y = Math.Abs((actor.Grid_Y - this.Grid_Y));
+            Vector2 vector = new Vector2();
+            vector.X = actor.Grid_X - this.Grid_X;
+            vector.Y = actor.Grid_Y - this.Grid_Y;
             return vector;
         }
+
+        public bool IsCreature(Actor actor) 
+        {
+            bool confirm = false;
+            if(actor as Creature != null)
+            {
+                confirm = true;
+            }
+
+            return confirm;
+        }
+
+        public bool IsPlant(Actor actor)
+        {
+            bool confirm = false;
+            if (actor as Plant != null)
+            {
+                confirm = true;
+            }
+
+            return confirm;
+        }
+
+        public bool IsLandscape(Actor actor)
+        {
+            bool confirm = false;
+            if (actor as Landscape != null)
+            {
+                confirm = true;
+            }
+
+            return confirm;
+        }
+
     }
 }
