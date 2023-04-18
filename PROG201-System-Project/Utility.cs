@@ -30,5 +30,16 @@ namespace PROG201_System_Project
             BitmapImage image = new BitmapImage(uri);
             return image;
         }
+
+        public static string ImageFileFromPath(string str)
+        {
+            char[] chars = str.ToCharArray();
+            char[] tofolder = chars.SkipWhile(i => i != 's').ToArray();
+            string folder = new string(tofolder);
+            char[] tofile = tofolder.SkipWhile(i => i != '/').ToArray();
+            tofile = tofile.Where(i => i != '/').ToArray();
+            string file = new string(tofile);
+            return file;
+        }
     }
 }

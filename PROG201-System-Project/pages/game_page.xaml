@@ -93,8 +93,6 @@
                     <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
 
-                <TextBlock x:Name="tb_char" Grid.Column="20" Grid.Row="10" Background="#FF6AC27F" />
-
             </Grid>
         </Border>
 

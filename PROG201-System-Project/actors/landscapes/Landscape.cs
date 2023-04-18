@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PROG201_System_Project.interfaces
+namespace PROG201_System_Project.actors.landscapes
 {
-    internal interface IEnviroment
+    internal class Landscape : Actor
     {
         public int WaterLevel { get; set; }
         public bool WaterDepleted { get; set; }

@@ -12,7 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using PROG201_System_Project.actors;
+using PROG201_System_Project.actors.creatures;
+using PROG201_System_Project.actors.landscapes;
 using static PROG201_System_Project.Utility;
 
 namespace PROG201_System_Project.pages
@@ -22,6 +23,8 @@ namespace PROG201_System_Project.pages
     /// </summary>
     public partial class game_page : Page
     {
+        public Dictionary<Image, Actor> Actors;
+
         Moth m;
 
         Water w;
@@ -30,22 +33,23 @@ namespace PROG201_System_Project.pages
             InitializeComponent();
 
             m = new Moth();
+            w = new Water();
+
+            Actors = new Dictionary<Image, Actor>();
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             Image img = m.Sprite;
 
-            MainWindow.UI.SpawnGridActor(grd_Board, m.Sprite, 5, 10);
-            MainWindow.UI.SpawnGridActor(grd_Board, w.Sprite, 6, 10);
-
+            w.SpawnGridActor(grd_Board,Actors, 10, 12);
+            m.SpawnGridActor(grd_Board,Actors, 14, 18);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-
-            MainWindow.UI.MoveGridActor(grd_Board,m.Sprite, 0, 1);
-
+            m.FindNearestWater(grd_Board, Actors);
+            m.MoveGridActor(grd_Board, m.Sprite, 0, 1);
         }
     }
 }
