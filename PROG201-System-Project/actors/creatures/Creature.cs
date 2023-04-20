@@ -68,6 +68,11 @@ namespace PROG201_System_Project.actors.creatures
         #region IMove
         public void MoveGridActor(Grid grid, Image sprite, int move_y, int move_x)
         {
+            //40
+            int total_x = grid.ColumnDefinitions.Count;
+            //20
+            int total_y = grid.RowDefinitions.Count;
+
             int cur_y = Grid.GetRow(sprite);
             int cur_x = Grid.GetColumn(sprite);
 
@@ -75,6 +80,12 @@ namespace PROG201_System_Project.actors.creatures
             int final_y = cur_y + move_y;
 
             ///if (CheckGridCollision(grid, final_x, final_y) != null) return;
+            
+            if (final_x < 0) final_x = 0;
+            if (final_y < 0) final_y = 0;
+
+            if (final_x > total_x) final_x = total_x;
+            if (final_y > total_y) final_y = total_y;
 
             Grid.SetRow(sprite, final_y);
             Grid.SetColumn(sprite, final_x);
@@ -212,16 +223,24 @@ namespace PROG201_System_Project.actors.creatures
 
         public void MoveRandom(Grid grid)
         {
+            GetCurrentPosition();
+
+            bool regen = false;
+
             int rand_y = Rand.Next(-MaxMovement, MaxMovement);
             int rand_x = Rand.Next(-MaxMovement, MaxMovement);
 
             Vector2 vec = new Vector2(rand_y, rand_x);
             int MaxHypot = GetHypotenuse(MaxMovement, MaxMovement);
 
-            if(vec.Length() == MaxHypot)
+            if (vec.Length() == MaxHypot) regen = true;
+
+            while(regen)
             {
                 rand_y = Rand.Next(-MaxMovement, MaxMovement);
                 rand_x = Rand.Next(-MaxMovement, MaxMovement);
+
+                if (vec.Length() < MaxHypot) regen = false;
             }
 
 
@@ -291,7 +310,7 @@ namespace PROG201_System_Project.actors.creatures
 
             if (!Alive) return;
 
-
+            MoveRandom(grid);
         }
     }
 }

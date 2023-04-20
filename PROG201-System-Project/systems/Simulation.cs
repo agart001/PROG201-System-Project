@@ -34,12 +34,15 @@ namespace PROG201_System_Project.systems
         public void Start()
         {
             
-            //Timer.Start();
+            Timer.Start();
         }
 
         void Simulation_Tick(object sender, EventArgs e)
         {
-
+            foreach(var actor in Actors.Values)
+            {
+                actor.TickAction(Board);
+            }
         }
 
     }

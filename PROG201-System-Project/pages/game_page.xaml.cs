@@ -29,7 +29,7 @@ namespace PROG201_System_Project.pages
         public game_page()
         {
             InitializeComponent();
-            Sim = new Simulation(grd_Board, 15);
+            Sim = new Simulation(grd_Board, .5);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
