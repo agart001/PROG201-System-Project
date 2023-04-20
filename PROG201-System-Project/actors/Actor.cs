@@ -18,14 +18,21 @@ namespace PROG201_System_Project
 {
     public class Actor
     {
+        public int TypeID { get; set; }
+        public int ActorID { get; set; }
+
         public Image Sprite = new Image();
 
         public string ImageFile = "default";
 
-        public virtual string SpriteColor { get; set; }
-
         public int Grid_Y { get; set; }
         public int Grid_X { get; set; }
+
+
+        public virtual void ParentPreConstruct()
+        {
+
+        }
 
         public virtual void PreContruct()
         {
@@ -39,6 +46,8 @@ namespace PROG201_System_Project
 
         public Actor()
         {
+            ParentPreConstruct();
+
             PreContruct();
 
             Sprite.Source = ImageFromString(ImageFile);

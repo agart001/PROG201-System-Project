@@ -50,6 +50,12 @@ namespace PROG201_System_Project.actors.creatures
         IFood NearestFood { get; set; }
 
 
+        public override void ParentPreConstruct()
+        {
+            TypeID = 2;
+        }
+
+
         #region IFood
 
         private int calories;

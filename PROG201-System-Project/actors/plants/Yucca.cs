@@ -11,6 +11,7 @@ namespace PROG201_System_Project.actors.plants
     {
         public override void PreContruct()
         {
+            ActorID = 0;
             ImageFile = "yucca";
         }
     }

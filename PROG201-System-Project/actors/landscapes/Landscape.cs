@@ -19,5 +19,10 @@ namespace PROG201_System_Project.actors.landscapes
             if (WaterLevel >= 0) WaterDepleted = true;
             if (VegetationLevel >= 0) VegetationDepleted = true;
         }
+
+        public override void ParentPreConstruct()
+        {
+            TypeID = 0;
+        }
     }
 }

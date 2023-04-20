@@ -34,5 +34,10 @@ namespace PROG201_System_Project.actors.plants
 
         public int Calories { get => calories; set => calories = value; }
         public bool Eaten { get => eaten; set => eaten = value; }
+
+        public override void ParentPreConstruct()
+        {
+            TypeID = 1;
+        }
     }
 }
