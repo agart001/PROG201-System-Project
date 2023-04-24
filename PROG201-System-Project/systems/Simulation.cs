@@ -41,7 +41,7 @@ namespace PROG201_System_Project.systems
         {
             foreach(var actor in Actors.Values)
             {
-                actor.TickAction(Board);
+                actor.TickAction(Board, Actors);
             }
         }
 

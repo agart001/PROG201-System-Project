@@ -76,19 +76,43 @@ namespace PROG201_System_Project.actors.creatures
             int cur_y = Grid.GetRow(sprite);
             int cur_x = Grid.GetColumn(sprite);
 
-            int final_x = cur_x + move_x;
-            int final_y = cur_y + move_y;
+            //int final_x = cur_x + move_x;
+            //int final_y = cur_y + move_y;
+
+            Vector2 vec = new Vector2();
+
+            vec.X = cur_x + move_x;
+            vec.Y = cur_y + move_y;
+
+            int len = Math.Abs((int)vec.Length());
+            int max_len = GetHypotenuse(cur_x + MaxMovement, cur_y + MaxMovement);
+
+            if(len > max_len)
+            {
+                int mag_x = (int)(vec.X/Math.Abs(vec.X));
+                int mag_y = (int)(vec.Y / Math.Abs(vec.Y));
+
+                vec.X = cur_x + (MaxMovement * mag_x);
+                vec.Y = cur_y + (MaxMovement * mag_y);
+            }
 
             ///if (CheckGridCollision(grid, final_x, final_y) != null) return;
             
-            if (final_x < 0) final_x = 0;
-            if (final_y < 0) final_y = 0;
+            if (vec.X < 0) vec.X = 0;
+            if (vec.Y < 0) vec.Y = 0;
 
-            if (final_x > total_x) final_x = total_x;
-            if (final_y > total_y) final_y = total_y;
+            if (vec.X > total_x) vec.X = total_x;
+            if (vec.Y > total_y) vec.Y = total_y;
 
-            Grid.SetRow(sprite, final_y);
-            Grid.SetColumn(sprite, final_x);
+            Grid.SetRow(sprite, (int)vec.Y);
+            Grid.SetColumn(sprite, (int)vec.X);
+        }
+
+        public void MoveToActor(Grid grid, Actor actor)
+        {
+            Vector2 vec = DistanceToActor(actor);
+
+            MoveGridActor(grid, Sprite, (int)vec.Y, (int)vec.X);
         }
 
         public UIElement CheckGridCollision(Grid grid, int y, int x)
@@ -97,6 +121,33 @@ namespace PROG201_System_Project.actors.creatures
 
             return child;
         }
+
+        public void MoveRandom(Grid grid)
+        {
+            GetCurrentPosition();
+
+            bool regen = false;
+
+            int rand_y = Rand.Next(-MaxMovement, MaxMovement);
+            int rand_x = Rand.Next(-MaxMovement, MaxMovement);
+
+            Vector2 vec = new Vector2(rand_y, rand_x);
+            int MaxHypot = GetHypotenuse(MaxMovement, MaxMovement);
+
+            if (vec.Length() == MaxHypot) regen = true;
+
+            while (regen)
+            {
+                rand_y = Rand.Next(-MaxMovement, MaxMovement);
+                rand_x = Rand.Next(-MaxMovement, MaxMovement);
+
+                if (vec.Length() < MaxHypot) regen = false;
+            }
+
+
+            MoveGridActor(grid, Sprite, rand_y, rand_x);
+        }
+
         #endregion
 
         #region Checks
@@ -139,7 +190,7 @@ namespace PROG201_System_Project.actors.creatures
         #endregion
 
         #region Pathing
-        public void FindNearestWater(Grid grid, Dictionary<Image, Actor> actors)
+        public Water FindNearestWater(Grid grid, Dictionary<Image, Actor> actors)
         {
             GetCurrentPosition();
 
@@ -157,17 +208,17 @@ namespace PROG201_System_Project.actors.creatures
                 index++;
             }
 
-            int[] travelabledistances = distances.Where(i => i <= MaxMovement).ToArray();
-            int smallestdist = travelabledistances.Min();
+            //int[] travelabledistances = distances.Where(i => i <= MaxMovement).ToArray();
+
+            int smallestdist = distances.Min();
             int smallestindex = distances.ToList().FindIndex(i=> i == smallestdist);
             Image smallestsprite = watersprites[smallestindex];
-            NearestWater = (Water)actors[smallestsprite];
 
-            MessageBox.Show("Dist: " + smallestdist);
+            return (Water)actors[smallestsprite];
 
         }
 
-        public void FindNearestFood(Grid grid, Dictionary<Image, Actor> actors)
+        public IFood FindNearestFood(Grid grid, Dictionary<Image, Actor> actors)
         {
             GetCurrentPosition();
 
@@ -185,66 +236,14 @@ namespace PROG201_System_Project.actors.creatures
                 index++;
             }
 
-            int[] travelabledistances = distances.Where(i => i <= MaxMovement).ToArray();
-            int smallestdist = travelabledistances.Min();
+            //int[] travelabledistances = distances.Where(i => i <= MaxMovement).ToArray();
+
+            int smallestdist = distances.Min();
             int smallestindex = distances.ToList().FindIndex(i => i == smallestdist);
             Image smallestsprite = foodsprites[smallestindex];
-            NearestFood = (IFood)actors[smallestsprite];
 
-            MessageBox.Show("Dist: " + smallestdist);
+            return (IFood)actors[smallestsprite];
 
-        }
-
-        public void MoveToWater(Grid grid, Dictionary<Image, Actor> actors)
-        {
-            FindNearestWater(grid, actors);
-
-            Vector2 vectowater = DistanceToActor(NearestWater);
-
-            MoveGridActor(grid, Sprite, (int)vectowater.Y, (int)vectowater.X);
-
-            Drink(NearestWater);
-
-            int B = 5;
-        }
-
-        public void MoveToFood(Grid grid, Dictionary<Image, Actor> actors)
-        {
-            FindNearestFood(grid, actors);
-
-            Vector2 vectofood = DistanceToActor(NearestFood as Actor);
-
-            MoveGridActor(grid, Sprite, (int)vectofood.Y, (int)vectofood.X);
-
-            Eat(NearestFood);
-
-            int B = 5;
-        }
-
-        public void MoveRandom(Grid grid)
-        {
-            GetCurrentPosition();
-
-            bool regen = false;
-
-            int rand_y = Rand.Next(-MaxMovement, MaxMovement);
-            int rand_x = Rand.Next(-MaxMovement, MaxMovement);
-
-            Vector2 vec = new Vector2(rand_y, rand_x);
-            int MaxHypot = GetHypotenuse(MaxMovement, MaxMovement);
-
-            if (vec.Length() == MaxHypot) regen = true;
-
-            while(regen)
-            {
-                rand_y = Rand.Next(-MaxMovement, MaxMovement);
-                rand_x = Rand.Next(-MaxMovement, MaxMovement);
-
-                if (vec.Length() < MaxHypot) regen = false;
-            }
-
-
-            MoveGridActor(grid, Sprite, rand_y, rand_x);
         }
 
         #endregion
@@ -303,14 +302,55 @@ namespace PROG201_System_Project.actors.creatures
         }
         #endregion
 
-        public override void TickAction(Grid grid)
+        public override void TickAction(Grid grid, Dictionary<Image, Actor> actors)
         {
+            GetCurrentPosition();
+
             CheckStatus();
             CheckAlive(grid);
 
             if (!Alive) return;
 
-            MoveRandom(grid);
+            if(!Thirsty && !Hungery)
+            {
+                MoveRandom(grid);
+            }
+
+            if(Thirsty)
+            {
+                NearestWater = FindNearestWater(grid, actors);
+                if (NearestWater != null)
+                {
+                    Vector2 vec = DistanceToActor(NearestWater);
+                    int dist = (int)vec.Length();
+                    if(dist > 0)
+                    {
+                        MoveToActor(grid, NearestWater);
+                    }
+                    else
+                    {
+                        Drink(NearestWater);
+                    }
+                }
+            }
+
+            if (Hungery)
+            {
+                NearestFood = FindNearestFood(grid, actors);
+                if (NearestFood != null)
+                {
+                    Vector2 vec = DistanceToActor(NearestFood as Actor);
+                    int dist = (int)vec.Length();
+                    if (dist > 0)
+                    {
+                        MoveToActor(grid, NearestFood as Actor);
+                    }
+                    else
+                    {
+                        Eat(NearestFood);
+                    }
+                }
+            }
         }
     }
 }

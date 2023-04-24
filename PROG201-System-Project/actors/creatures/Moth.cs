@@ -35,12 +35,14 @@ namespace PROG201_System_Project.actors.creatures
             WaterIntake = 2;
 
             MaxHunger = 20;
-            Hunger = 15;
-            HungerMR = .25;
+            Hunger = 20;
+            HungerMR = 0;
             PreferredFood = new Yucca();
 
             Calories = 5;
             Eaten = false;
+
+            //Thirsty = true;
         }
 
 

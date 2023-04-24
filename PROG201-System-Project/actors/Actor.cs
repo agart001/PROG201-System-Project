@@ -55,7 +55,7 @@ namespace PROG201_System_Project
             PostContruct();
         }
 
-        public virtual void TickAction(Grid grid)
+        public virtual void TickAction(Grid grid, Dictionary<Image, Actor> actors)
         {
 
         }
