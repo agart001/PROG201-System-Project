@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace PROG201_System_Project.actors.landscapes
 {
@@ -17,11 +18,23 @@ namespace PROG201_System_Project.actors.landscapes
 
         public override void PostContruct()
         {
+            MaxWaterLevel = 100;
             WaterLevel = 100;
             WaterDepleted = false;
 
+            MaxVegetationLevel = 0;
             VegetationLevel = 0;
             VegetationDepleted = true;
+        }
+
+        public override void CheckDepletion()
+        {
+            if(WaterLevel <= 0)
+            {
+                WaterDepleted = true;
+            }
+
+            Sprite.Opacity = WaterLevel / MaxWaterLevel;
         }
     }
 }

@@ -41,7 +41,14 @@ namespace PROG201_System_Project.systems
         {
             foreach(var actor in Actors.Values)
             {
-                actor.TickAction(Board, Actors);
+                if (actor.IsCreature())
+                {
+                    actor.TickAction(Board, Actors);
+                }
+                else
+                {
+                    actor.TickAction();
+                }
             }
         }
 

@@ -79,13 +79,11 @@ namespace PROG201_System_Project.actors.creatures
             //int final_x = cur_x + move_x;
             //int final_y = cur_y + move_y;
 
-            Vector2 vec = new Vector2();
-
-            vec.X = cur_x + move_x;
-            vec.Y = cur_y + move_y;
+            Vector2 vec = new Vector2(cur_x + move_x, cur_y + move_y);
+            Vector2 maxvec = new Vector2(cur_x + MaxMovement, cur_y + MaxMovement);
 
             int len = Math.Abs((int)vec.Length());
-            int max_len = GetHypotenuse(cur_x + MaxMovement, cur_y + MaxMovement);
+            int max_len = Math.Abs((int)maxvec.Length());
 
             if(len > max_len)
             {

@@ -32,7 +32,7 @@ namespace PROG201_System_Project.actors.creatures
             MaxHydration = 20;
             Hydration = 5;
             HydrationMR = .25;
-            WaterIntake = 3;
+            WaterIntake = 2;
 
             MaxHunger = 20;
             Hunger = 20;

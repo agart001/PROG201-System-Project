@@ -2,6 +2,5 @@
 <actors>
 	<actor typeid="2" actorid="0" x="1" y="2"/>
 	<actor typeid="2" actorid="0" x="35" y="18"/>
-	<actor typeid="0" actorid="0" x="12" y="5"/>
-	<actor typeid="0" actorid="0" x="30" y="15"/>
+	<actor typeid="0" actorid="0" x="20" y="10"/>
 </actors>

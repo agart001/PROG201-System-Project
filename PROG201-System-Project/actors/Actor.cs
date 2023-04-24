@@ -55,6 +55,11 @@ namespace PROG201_System_Project
             PostContruct();
         }
 
+
+        public virtual void TickAction()
+        {
+
+        }
         public virtual void TickAction(Grid grid, Dictionary<Image, Actor> actors)
         {
 
@@ -85,10 +90,10 @@ namespace PROG201_System_Project
             return vector;
         }
 
-        public bool IsCreature(Actor actor) 
+        public bool IsCreature() 
         {
             bool confirm = false;
-            if(actor as Creature != null)
+            if(this as Creature != null)
             {
                 confirm = true;
             }
@@ -96,10 +101,10 @@ namespace PROG201_System_Project
             return confirm;
         }
 
-        public bool IsPlant(Actor actor)
+        public bool IsPlant()
         {
             bool confirm = false;
-            if (actor as Plant != null)
+            if (this as Plant != null)
             {
                 confirm = true;
             }
@@ -107,10 +112,10 @@ namespace PROG201_System_Project
             return confirm;
         }
 
-        public bool IsLandscape(Actor actor)
+        public bool IsLandscape()
         {
             bool confirm = false;
-            if (actor as Landscape != null)
+            if (this as Landscape != null)
             {
                 confirm = true;
             }
