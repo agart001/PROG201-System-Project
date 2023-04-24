@@ -89,7 +89,7 @@ namespace PROG201_System_Project.actors.creatures
 
             if(len > max_len)
             {
-                int mag_x = (int)(vec.X/Math.Abs(vec.X));
+                int mag_x = (int)(vec.X / Math.Abs(vec.X));
                 int mag_y = (int)(vec.Y / Math.Abs(vec.Y));
 
                 vec.X = cur_x + (MaxMovement * mag_x);
@@ -154,16 +154,24 @@ namespace PROG201_System_Project.actors.creatures
 
         void CheckThrist()
         {
-            if(Hydration < MaxHydration)
+            if(Hydration < MaxHydration * .6)
             {
                 Thirsty = true;
+            }
+            else
+            {
+                Thirsty = false;
             }
         }
         void CheckHunger()
         {
-            if (Hunger < MaxHunger)
+            if (Hunger < MaxHunger * .6)
             {
                 Hungery = true;
+            }
+            else
+            {
+                Hungery = false;
             }
         }
 
@@ -256,7 +264,11 @@ namespace PROG201_System_Project.actors.creatures
                 if(Hydration < MaxHydration)
                 {
                     water.WaterLevel -= WaterIntake;
-                    Hydration += WaterIntake;
+                    if(Hydration + WaterIntake > MaxHydration)
+                    {
+                        Hydration = MaxHydration;
+                    }
+                    else { Hydration += WaterIntake; }
                 }
                 water.CheckDepletion();
             }

@@ -30,9 +30,9 @@ namespace PROG201_System_Project.actors.creatures
             AttackDamage = 2;
 
             MaxHydration = 20;
-            Hydration = 15;
+            Hydration = 5;
             HydrationMR = .25;
-            WaterIntake = 2;
+            WaterIntake = 3;
 
             MaxHunger = 20;
             Hunger = 20;
