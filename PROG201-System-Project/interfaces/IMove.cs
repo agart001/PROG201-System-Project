@@ -12,7 +12,7 @@ namespace PROG201_System_Project.interfaces
 {
     internal interface IMove
     {
-        public void MoveGridActor(Grid grid, Image sprite, int move_y, int move_x);
+        public void Move(Grid grid, Image sprite, int move_y, int move_x);
 
         public void MoveToActor(Grid grid, Actor actor);
 

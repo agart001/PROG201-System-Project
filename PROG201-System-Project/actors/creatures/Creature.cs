@@ -66,26 +66,26 @@ namespace PROG201_System_Project.actors.creatures
         #endregion
 
         #region IMove
-        public void MoveGridActor(Grid grid, Image sprite, int move_y, int move_x)
+        public void Move(Grid grid, Image sprite, int move_y, int move_x)
         {
             //40
             int total_x = grid.ColumnDefinitions.Count;
             //20
             int total_y = grid.RowDefinitions.Count;
 
-            int cur_y = Grid.GetRow(sprite);
-            int cur_x = Grid.GetColumn(sprite);
+            int cur_y = Grid_Y;
+            int cur_x = Grid_X;
 
             //int final_x = cur_x + move_x;
             //int final_y = cur_y + move_y;
 
-            Vector2 vec = new Vector2(cur_x + move_x, cur_y + move_y);
-            Vector2 maxvec = new Vector2(cur_x + MaxMovement, cur_y + MaxMovement);
+            Vector2 vec = new Vector2(move_x, move_y);
+            Vector2 maxvec = new Vector2(MaxMovement, MaxMovement);
 
             int len = Math.Abs((int)vec.Length());
             int max_len = Math.Abs((int)maxvec.Length());
 
-            if(len > max_len)
+            if (len > max_len)
             {
                 int mag_x = (int)(vec.X / Math.Abs(vec.X));
                 int mag_y = (int)(vec.Y / Math.Abs(vec.Y));
@@ -93,9 +93,14 @@ namespace PROG201_System_Project.actors.creatures
                 vec.X = cur_x + (MaxMovement * mag_x);
                 vec.Y = cur_y + (MaxMovement * mag_y);
             }
+            else
+            {
+                vec.X = cur_x + move_x;
+                vec.Y = cur_y + move_y;
+            }
 
-            ///if (CheckGridCollision(grid, final_x, final_y) != null) return;
-            
+                ///if (CheckGridCollision(grid, final_x, final_y) != null) return;
+
             if (vec.X < 0) vec.X = 0;
             if (vec.Y < 0) vec.Y = 0;
 
@@ -110,7 +115,7 @@ namespace PROG201_System_Project.actors.creatures
         {
             Vector2 vec = DistanceToActor(actor);
 
-            MoveGridActor(grid, Sprite, (int)vec.Y, (int)vec.X);
+            Move(grid, Sprite, (int)vec.Y, (int)vec.X);
         }
 
         public UIElement CheckGridCollision(Grid grid, int y, int x)
@@ -122,33 +127,22 @@ namespace PROG201_System_Project.actors.creatures
 
         public void MoveRandom(Grid grid)
         {
-            GetCurrentPosition();
-
-            bool regen = false;
-
             int rand_y = Rand.Next(-MaxMovement, MaxMovement);
             int rand_x = Rand.Next(-MaxMovement, MaxMovement);
 
             Vector2 vec = new Vector2(rand_y, rand_x);
-            int MaxHypot = GetHypotenuse(MaxMovement, MaxMovement);
 
-            if (vec.Length() == MaxHypot) regen = true;
-
-            while (regen)
-            {
-                rand_y = Rand.Next(-MaxMovement, MaxMovement);
-                rand_x = Rand.Next(-MaxMovement, MaxMovement);
-
-                if (vec.Length() < MaxHypot) regen = false;
-            }
-
-
-            MoveGridActor(grid, Sprite, rand_y, rand_x);
+            Move(grid, Sprite, (int)vec.Y, (int)vec.X);
         }
 
         #endregion
 
         #region Checks
+        void ApplyMR()
+        {
+            Hydration -= HydrationMR;
+            Hunger -= HungerMR;
+        }
 
         void CheckThrist()
         {
@@ -198,8 +192,6 @@ namespace PROG201_System_Project.actors.creatures
         #region Pathing
         public Water FindNearestWater(Grid grid, Dictionary<Image, Actor> actors)
         {
-            GetCurrentPosition();
-
             //BitmapImage waterbmp = new BitmapImage(new Uri("{pack://application:,,,/images/water.BMP}"));
 
             List<Image> images = grid.Children.Cast<Image>().ToList();
@@ -221,13 +213,10 @@ namespace PROG201_System_Project.actors.creatures
             Image smallestsprite = watersprites[smallestindex];
 
             return (Water)actors[smallestsprite];
-
         }
 
         public IFood FindNearestFood(Grid grid, Dictionary<Image, Actor> actors)
         {
-            GetCurrentPosition();
-
             //BitmapImage waterbmp = new BitmapImage(new Uri("{pack://application:,,,/images/water.BMP}"));
             Actor FoodActor = PreferredFood as Actor;
             List<Image> images = grid.Children.Cast<Image>().ToList();
@@ -249,7 +238,6 @@ namespace PROG201_System_Project.actors.creatures
             Image smallestsprite = foodsprites[smallestindex];
 
             return (IFood)actors[smallestsprite];
-
         }
 
         #endregion
@@ -268,7 +256,6 @@ namespace PROG201_System_Project.actors.creatures
                     }
                     else { Hydration += WaterIntake; }
                 }
-                water.CheckDepletion();
             }
         }
 
@@ -315,6 +302,8 @@ namespace PROG201_System_Project.actors.creatures
         public override void TickAction(Grid grid, Dictionary<Image, Actor> actors)
         {
             GetCurrentPosition();
+
+            ApplyMR();
 
             CheckStatus();
             CheckAlive(grid);

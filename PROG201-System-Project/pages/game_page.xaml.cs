@@ -36,20 +36,5 @@ namespace PROG201_System_Project.pages
         {
             
         }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            //m.MoveToFood(grd_Board, Actors);
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            //m.MoveToWater(grd_Board, Actors);
-        }
-
-        private void Button_Click_2(object sender, RoutedEventArgs e)
-        {
-            //m.MoveRandom(grd_Board);
-        }
     }
 }

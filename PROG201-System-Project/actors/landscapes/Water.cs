@@ -34,7 +34,17 @@ namespace PROG201_System_Project.actors.landscapes
                 WaterDepleted = true;
             }
 
-            Sprite.Opacity = WaterLevel / MaxWaterLevel;
+            double opacity;
+            if(WaterLevel / MaxWaterLevel < .25)
+            {
+                opacity = .25;
+            }
+            else
+            {
+                opacity = WaterLevel / MaxWaterLevel;
+            }
+
+            Sprite.Opacity = opacity;
         }
     }
 }
