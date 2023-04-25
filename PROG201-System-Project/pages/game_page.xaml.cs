@@ -25,16 +25,17 @@ namespace PROG201_System_Project.pages
     /// </summary>
     public partial class game_page : Page
     {
-        Simulation Sim;
+        public Simulation Sim;
         public game_page()
         {
             InitializeComponent();
             Sim = new Simulation(grd_Board, 1);
+
+            grd_HUD.DataContext = Sim;
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            
         }
     }
 }
