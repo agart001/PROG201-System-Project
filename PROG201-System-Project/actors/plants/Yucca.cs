@@ -7,12 +7,18 @@ using System.Threading.Tasks;
 
 namespace PROG201_System_Project.actors.plants
 {
-    internal class Yucca : Plant, IFood
+    public class Yucca : Plant, IFood
     {
         public override void PreContruct()
         {
             ActorID = 0;
             ImageFile = "yucca";
+        }
+
+        public override void PostContruct()
+        {
+            FlowerSeason = "Spring";
+            FruitSeason = "Summer";
         }
     }
 }

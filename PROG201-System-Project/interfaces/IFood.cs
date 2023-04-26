@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PROG201_System_Project.interfaces
 {
-    internal interface IFood
+    public interface IFood
     {
         public int Calories { get; set; }
 

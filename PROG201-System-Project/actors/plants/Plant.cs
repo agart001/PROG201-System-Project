@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PROG201_System_Project.actors.plants
 {
-    internal class Plant : Actor, IFood
+    public class Plant : Actor, IFood
     {
         #region Private Variables
         private int calories;

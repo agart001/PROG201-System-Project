@@ -8,7 +8,7 @@ using System.Windows.Controls;
 
 namespace PROG201_System_Project.actors.landscapes
 {
-    internal class Water : Landscape
+    public class Water : Landscape
     {
         public override void PreContruct()
         {
@@ -18,8 +18,8 @@ namespace PROG201_System_Project.actors.landscapes
 
         public override void PostContruct()
         {
-            MaxWaterLevel = 100;
-            WaterLevel = 100;
+            MaxWaterLevel = 50;
+            WaterLevel = 50;
             WaterDepleted = false;
 
             MaxVegetationLevel = 0;
@@ -27,15 +27,10 @@ namespace PROG201_System_Project.actors.landscapes
             VegetationDepleted = true;
         }
 
-        public override void CheckDepletion()
+        public override void SpriteOpacity()
         {
-            if(WaterLevel <= 0)
-            {
-                WaterDepleted = true;
-            }
-
             double opacity;
-            if(WaterLevel / MaxWaterLevel < .25)
+            if (WaterLevel / MaxWaterLevel < .25)
             {
                 opacity = .25;
             }
@@ -45,6 +40,20 @@ namespace PROG201_System_Project.actors.landscapes
             }
 
             Sprite.Opacity = opacity;
+        }
+
+        public override void CheckDepletion()
+        {
+            CheckWater();
+        }
+
+        public override void TickAction(Grid grid, Dictionary<Image, Actor> actors)
+        {
+            SpriteOpacity();
+
+            CheckDepletion();
+
+            Depleted(grid, actors);
         }
     }
 }

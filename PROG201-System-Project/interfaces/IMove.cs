@@ -10,7 +10,7 @@ using System.Windows.Controls;
 
 namespace PROG201_System_Project.interfaces
 {
-    internal interface IMove
+    public interface IMove
     {
         public void Move(Grid grid, Image sprite, int move_y, int move_x);
 

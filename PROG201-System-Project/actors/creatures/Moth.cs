@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PROG201_System_Project.actors.creatures
 {
-    class Moth : Creature
+    public class Moth : Creature
     {
         public override void PreContruct()
         {
@@ -30,9 +30,9 @@ namespace PROG201_System_Project.actors.creatures
             AttackDamage = 2;
 
             MaxHydration = 20;
-            Hydration = 16;
+            Hydration = 20;
             HydrationMR = .5;
-            WaterIntake = 2;
+            WaterIntake = 5;
 
             MaxHunger = 20;
             Hunger = 20;

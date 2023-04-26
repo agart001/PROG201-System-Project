@@ -14,7 +14,7 @@ using PROG201_System_Project.actors.plants;
 
 namespace PROG201_System_Project.actors.creatures
 {
-    internal class Creature : Actor, IMove, IFood
+    public class Creature : Actor, IMove, IFood
     {
 
         public enum VoreType
@@ -39,7 +39,7 @@ namespace PROG201_System_Project.actors.creatures
         public int MaxHydration { get; set; }
         public double Hydration { get; set; }
         public double HydrationMR { get; set; }
-        public int WaterIntake { get; set; }
+        public double WaterIntake { get; set; }
         Water NearestWater { get; set; }
 
         public bool Hungery { get; set; }
@@ -172,11 +172,11 @@ namespace PROG201_System_Project.actors.creatures
             if (Eaten) Alive = false;
         }
 
-        void CheckAlive(Grid grid)
+        void CheckAlive(Grid grid, Dictionary<Image, Actor> actors)
         {
             if (!Alive)
             {
-                grid.Children.Remove(Sprite);
+                DeleteActor(grid, actors, this);
             }
         }
 
@@ -196,6 +196,8 @@ namespace PROG201_System_Project.actors.creatures
 
             List<Image> images = grid.Children.Cast<Image>().ToList();
             List<Image> watersprites = images.FindAll(i => ImageFileFromPath(i.Source.ToString()) == "water.BMP");
+
+            if (watersprites.Count <= 0) return null;
 
             int[] distances = new int[watersprites.Count];
             int index = 0;
@@ -221,6 +223,8 @@ namespace PROG201_System_Project.actors.creatures
             Actor FoodActor = PreferredFood as Actor;
             List<Image> images = grid.Children.Cast<Image>().ToList();
             List<Image> foodsprites = images.FindAll(i => ImageFileFromPath(i.Source.ToString()) == ImageFileFromPath(FoodActor.Sprite.Source.ToString()));
+
+            if (foodsprites.Count <= 0) return null;
 
             int[] distances = new int[foodsprites.Count];
             int index = 0;
@@ -249,7 +253,7 @@ namespace PROG201_System_Project.actors.creatures
             {
                 if(Hydration < MaxHydration)
                 {
-                    water.WaterLevel -= WaterIntake;
+                    water.DecrementWaterLevel(WaterIntake);
                     if(Hydration + WaterIntake > MaxHydration)
                     {
                         Hydration = MaxHydration;
@@ -306,7 +310,7 @@ namespace PROG201_System_Project.actors.creatures
             ApplyMR();
 
             CheckStatus();
-            CheckAlive(grid);
+            CheckAlive(grid, actors);
 
             if (!Alive) return;
 

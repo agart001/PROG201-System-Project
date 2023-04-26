@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,6 +37,16 @@ namespace PROG201_System_Project.pages
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+        }
+
+        private void Slow_Click(object sender, RoutedEventArgs e)
+        {
+            Sim.IncreaseInterval();
+        }
+
+        private void Fast_Click(object sender, RoutedEventArgs e)
+        {
+            Sim.DecreaseInterval();
         }
     }
 }

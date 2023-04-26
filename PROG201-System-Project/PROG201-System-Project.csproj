@@ -9,12 +9,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="images\arrow" />
     <None Remove="images\default.BMP" />
     <None Remove="images\water.BMP" />
     <None Remove="images\yucca.BMP" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="images\arrow.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\water.BMP">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

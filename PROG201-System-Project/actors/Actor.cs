@@ -60,11 +60,25 @@ namespace PROG201_System_Project
         {
 
         }
+        public virtual void TickAction(Grid grid)
+        {
+
+        }
         public virtual void TickAction(Grid grid, Dictionary<Image, Actor> actors)
         {
 
         }
 
+
+        public virtual void SpriteOpacity() { }
+
+        public void DeleteActor(Grid grid, Dictionary<Image, Actor> actors, Actor actor)
+        {
+            grid.Children.Remove(Sprite);
+            actors.Remove(Sprite, out actor);
+        }
+
+        #region Position
         public void GetCurrentPosition()
         {
             Grid_Y = Grid.GetRow(this.Sprite);
@@ -89,7 +103,9 @@ namespace PROG201_System_Project
             vector.Y = actor.Grid_Y - this.Grid_Y;
             return vector;
         }
+        #endregion
 
+        #region Actor Type
         public bool IsCreature() 
         {
             bool confirm = false;
@@ -122,6 +138,6 @@ namespace PROG201_System_Project
 
             return confirm;
         }
-
+        #endregion
     }
 }
