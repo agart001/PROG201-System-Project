@@ -72,6 +72,8 @@ namespace PROG201_System_Project
 
         public virtual void SpriteOpacity() { }
 
+        public Actor Clone() => (Actor)this.MemberwiseClone();
+
         public void DeleteActor(Grid grid, Dictionary<Image, Actor> actors, Actor actor)
         {
             grid.Children.Remove(Sprite);

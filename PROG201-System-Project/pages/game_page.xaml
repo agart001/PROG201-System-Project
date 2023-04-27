@@ -65,10 +65,21 @@
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
-                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0" Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width=".5*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Column="0" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Moth" FontSize="10" Background="White"/>
+                    <TextBlock Grid.Column="1" Margin="2,2,2,2" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Path=CreatureCounts, UpdateSourceTrigger=PropertyChanged}" Background="Wheat"/>
+                </Grid>
 
             </Grid>
 
@@ -98,34 +109,106 @@
         <Grid Grid.Column="0" Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height=".5*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height=".5*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height=".5*"/>
-                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1.5*"/>
+                <RowDefinition Height="3.5*"/>
             </Grid.RowDefinitions>
 
-            <Label Grid.Column="0" Grid.Row="0" Margin="5,5,5,5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Slow" FontSize="15" Background="White" />
-            <Label Grid.Column="1" Grid.Row="0" Margin="5,5,5,5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Fast" FontSize="15" Background="White" />
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height=".5*"/>
+                    <RowDefinition Height=".5*"/>
+                </Grid.RowDefinitions>
 
-            <Button Grid.Column="0" Grid.Row="1" Margin="5,5,5,5" Click="Slow_Click">
-                <Image Stretch="Fill">
-                    <Image.Source>
-                        <TransformedBitmap Source="/images/arrow.BMP">
-                            <TransformedBitmap.Transform>
-                                <RotateTransform Angle="180"/>
-                            </TransformedBitmap.Transform>
-                        </TransformedBitmap>
-                    </Image.Source>
-                </Image>
-            </Button>
-            <Button Grid.Column="1" Grid.Row="1" Margin="5,5,5,5" Click="Fast_Click">
-                <Image Stretch="Fill" Source="/images/arrow.BMP"/>
-            </Button>
+                <Label Grid.Column="0" Grid.Row="0" Margin="5,5,5,5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Slow" FontSize="15" Background="White" />
+                <Label Grid.Column="1" Grid.Row="0" Margin="5,5,5,5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Fast" FontSize="15" Background="White" />
+
+                <Button Grid.Column="0" Grid.Row="1" Margin="5,5,5,5" Click="Slow_Click">
+                    <Image Stretch="Fill">
+                        <Image.Source>
+                            <TransformedBitmap Source="/images/arrow.BMP">
+                                <TransformedBitmap.Transform>
+                                    <RotateTransform Angle="180"/>
+                                </TransformedBitmap.Transform>
+                            </TransformedBitmap>
+                        </Image.Source>
+                    </Image>
+                </Button>
+                <Button Grid.Column="1" Grid.Row="1" Margin="5,5,5,5" Click="Fast_Click">
+                    <Image Stretch="Fill" Source="/images/arrow.BMP"/>
+                </Button>
+            </Grid>
+
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height=".5*"/>
+                    <RowDefinition Height="3.5*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+
+                <Label Grid.Row="0" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Add Actors" Background="White"/>
+
+                <Grid x:Name="grd_ActorButtons" Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width=".75*"/>
+                        <ColumnDefinition Width=".5*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <RadioButton Grid.Column="0" Grid.Row="0" Margin="5,5,5,5" Content="Water" GroupName="Landscape" Checked="Actor_Checked"/>
+                    <RadioButton Grid.Column="0" Grid.Row="1" Margin="5,5,5,5" Content="Water" GroupName="Landscape" Checked="Actor_Checked"/>
+                    <RadioButton Grid.Column="0" Grid.Row="2" Margin="5,5,5,5" Content="Water" GroupName="Landscape" Checked="Actor_Checked"/>
+                    <RadioButton Grid.Column="0" Grid.Row="3" Margin="5,5,5,5" Content="Water" GroupName="Landscape" Checked="Actor_Checked"/>
+                    <RadioButton Grid.Column="0" Grid.Row="4" Margin="5,5,5,5" Content="Water" GroupName="Landscape" Checked="Actor_Checked"/>
+                    <RadioButton Grid.Column="0" Grid.Row="5" Margin="5,5,5,5" Content="Water" GroupName="Landscape" Checked="Actor_Checked"/>
+
+                    <Image Grid.Column="1" Grid.Row="0" Margin="5" Source="/images/water.BMP"/>
+                    <Image Grid.Column="1" Grid.Row="1" Margin="5" Source="/images/water.BMP"/>
+                    <Image Grid.Column="1" Grid.Row="2" Margin="5" Source="/images/water.BMP"/>
+                    <Image Grid.Column="1" Grid.Row="3" Margin="5" Source="/images/water.BMP"/>
+                    <Image Grid.Column="1" Grid.Row="4" Margin="5" Source="/images/water.BMP"/>
+                    <Image Grid.Column="1" Grid.Row="5" Margin="5" Source="/images/water.BMP"/>
+                </Grid>
+
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="0" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="+" Click="Add_Click"/>
+
+                    <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height=".5*"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
+
+                        <Label Grid.Column="0" Grid.Row="0" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="X" Background="White"/>
+                        <Label Grid.Column="1" Grid.Row="0" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Y" Background="White"/>
+
+                        <TextBox x:Name="tb_AddX" Grid.Column="0" Grid.Row="1" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Text="0" Background="Wheat"/>
+                        <TextBox x:Name="tb_AddY" Grid.Column="1" Grid.Row="1" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Text="0" Background="Wheat"/>
+
+
+                    </Grid>
+                </Grid>
+            </Grid>
         </Grid>
 
         <Border Grid.Column="1" Grid.Row="1" BorderBrush="Black" BorderThickness="5">

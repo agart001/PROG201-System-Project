@@ -48,5 +48,25 @@ namespace PROG201_System_Project.pages
         {
             Sim.DecreaseInterval();
         }
+
+        private void Actor_Checked(object sender, RoutedEventArgs e)
+        {
+            RadioButton button = sender as RadioButton;
+
+            string groupname = (string)button.GroupName;
+            string content = (string)button.Content;
+
+            Sim.FindActor(groupname, content);
+        }
+
+        private void Add_Click(object sender, RoutedEventArgs e)
+        {
+            int x = Convert.ToInt32(tb_AddX.Text);
+            int y = Convert.ToInt32(tb_AddY.Text);
+
+            Sim.AddActor(x, y);
+
+            MainWindow.UI.UnCheckGridButtons(grd_ActorButtons);
+        }
     }
 }

@@ -25,5 +25,20 @@ namespace PROG201_System_Project
             Uri uri = new Uri(page, UriKind.Relative);
             main.Source = uri;
         }
+
+        public void UnCheckGridButtons(Grid grid)
+        {
+            List<UIElement> elements = grid.Children.OfType<UIElement>().ToList();
+
+            List<RadioButton> buttons = elements.OfType<RadioButton>().ToList();
+
+            foreach(RadioButton button in buttons)
+            {
+                if (button.IsChecked == true)
+                {
+                    button.IsChecked = false;
+                }
+            }
+        }
     }
 }

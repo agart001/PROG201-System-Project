@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -63,11 +64,11 @@ namespace PROG201_System_Project.systems
 
         #region Actor Lists
 
-        public List<Creature> Creatures = new List<Creature>();
+        Actor NewActor = new Actor();
 
-        public List<Landscape> Landscapes = new List<Landscape>();
-
-        public List<Plant> Plants = new List<Plant>();
+        public List<Creature> ActiveCreatures = new List<Creature>();
+        public List<Landscape> ActiveLandscapes = new List<Landscape>();
+        public List<Plant> ActivePlants = new List<Plant>();
 
         void GetActorLists()
         {
@@ -75,24 +76,151 @@ namespace PROG201_System_Project.systems
             {
                 if(actor.IsCreature())
                 {
-                    Creatures.Add(actor as Creature);
+                    ActiveCreatures.Add(actor as Creature);
                 }
 
                 if(actor.IsLandscape())
                 {
-                    Landscapes.Add(actor as Landscape);
+                    ActiveLandscapes.Add(actor as Landscape);
                 }
 
                 if(actor.IsPlant())
                 {
-                    Plants.Add(actor as Plant);
+                    ActivePlants.Add(actor as Plant);
                 }
             }
         }
         #endregion
 
+        #region Actor Types
+
+        List<Actor> ActorTypes = new List<Actor>();
+
+        List<Creature> CreatureTypes = new List<Creature>();
+        List<Landscape> LandscapeTypes = new List<Landscape>();
+        List<Plant> PlantTypes = new List<Plant>();
+
+        List<Actor> GetActorTypes()
+        {
+            //Sourec: https://stackoverflow.com/questions/5411694/get-all-inherited-classes-of-an-abstract-class
+            List<Actor> actors = new List<Actor>();
+            foreach (Type type in
+                Assembly.GetAssembly(typeof(Actor)).GetTypes()
+                .Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(Actor))))
+            {
+                actors.Add((Actor)Activator.CreateInstance(type));
+            }
+            //
+
+
+            actors = actors.FindAll(a =>
+            a.GetType().Name == "Creature" ||
+            a.GetType().Name == "Landscape" ||
+            a.GetType().Name == "Plant").ToList();
+
+
+            return actors;
+        }
+        List<Creature> GetCreatureTypes()
+        {
+            List<Creature> types = new List<Creature>();
+            foreach (Type type in
+                Assembly.GetAssembly(typeof(Creature)).GetTypes()
+                .Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(Creature))))
+            {
+                types.Add((Creature)Activator.CreateInstance(type));
+            }
+
+            return types;
+        }
+        List<Landscape> GetLandscapeTypes()
+        {
+            List<Landscape> types = new List<Landscape>();
+            foreach (Type type in
+                Assembly.GetAssembly(typeof(Landscape)).GetTypes()
+                .Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(Landscape))))
+            {
+                types.Add((Landscape)Activator.CreateInstance(type));
+            }
+
+            return types;
+        }
+        List<Plant> GetPlantTypes()
+        {
+            List<Plant> types = new List<Plant>();
+            foreach (Type type in
+                Assembly.GetAssembly(typeof(Plant)).GetTypes()
+                .Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(Plant))))
+            {
+                types.Add((Plant)Activator.CreateInstance(type));
+            }
+
+            return types;
+        }
+
+        void GetAllTypes()
+        {
+            ActorTypes = GetActorTypes();
+
+            CreatureTypes = GetCreatureTypes();
+            LandscapeTypes = GetLandscapeTypes();
+            PlantTypes = GetPlantTypes();
+        }
+        #endregion
+
+        #region Actor Counts
+
+        private Dictionary<Creature, int> creaturecounts;
+        private Dictionary<Landscape, int> landscapecounts;
+        private Dictionary<Plant, int> plantscounts;
+
+        public Dictionary<Creature, int> CreatureCounts { get { return creaturecounts; } set { creaturecounts = value; OnPropertyChanged(); } }
+        public Dictionary<Landscape, int> LandscapeCounts { get { return landscapecounts; } set { landscapecounts = value; OnPropertyChanged(); } }
+        public Dictionary<Plant, int> PlantsCounts { get { return plantscounts; } set { plantscounts= value; OnPropertyChanged(); } }
+
+        void GetCreatureCount(Creature creature)
+        {
+            List<Creature> active = ActiveCreatures.FindAll(c => c.ActorID == creature.ActorID).ToList();
+            CreatureCounts[creature] = active.Count;
+        }
+
+        void GetLandscapeCount(Landscape landscape)
+        {
+            List<Landscape> active = ActiveLandscapes.FindAll(l => l.ActorID == landscape.ActorID).ToList();
+            LandscapeCounts[landscape] = active.Count;
+        }
+
+        void GetPlantCount(Plant plant)
+        {
+            List<Plant> active = ActivePlants.FindAll(p => p.ActorID == plant.ActorID).ToList();
+            PlantsCounts[plant] = active.Count;
+        }
+
+        void InitCounts()
+        {
+            CreatureCounts = new Dictionary<Creature, int>();
+            LandscapeCounts = new Dictionary<Landscape, int>();
+            PlantsCounts = new Dictionary<Plant, int>();
+
+            CreatureTypes.ForEach(c => CreatureCounts.Add(c, 0));
+            LandscapeTypes.ForEach(l => LandscapeCounts.Add(l, 0));
+            PlantTypes.ForEach(p => PlantsCounts.Add(p, 0));
+        }
+
+        void GetCounts()
+        {
+            CreatureTypes.ForEach(c => GetCreatureCount(c));
+            LandscapeTypes.ForEach(l => GetLandscapeCount(l));
+            PlantTypes.ForEach(p => GetPlantCount(p));
+        }
+        #endregion
+
         public Simulation(Grid grid, double interval) 
         {
+            GetAllTypes();
+
+            InitCounts();
+
             DefaultInterval = TimeSpan.FromSeconds(interval);
             Timer = new DispatcherTimer();
             SetTimerInterval();
@@ -104,11 +232,56 @@ namespace PROG201_System_Project.systems
 
             GetActorLists();
 
-            Weather = new Weather(Landscapes, Plants);
+            GetCounts();
+
+            Weather = new Weather(ActiveLandscapes, ActivePlants);
 
             Start();
         }
 
+        #region Actor Add
+        Actor GetActor(string type, string name)
+        {
+            Actor actor = new Actor();
+            Type actortype = actor.GetType();
+            switch (type)
+            {
+                case "Creature":
+                    actortype = CreatureTypes.Find(c => c.GetType().Name == name).GetType();
+                    break;
+                case "Landscape":
+                    actortype = LandscapeTypes.Find(c => c.GetType().Name == name).GetType();
+                    break;
+                case "Plant":
+                    actortype = PlantTypes.Find(c => c.GetType().Name == name).GetType();
+                    break;
+                default:
+                    actor = null;
+                    break;
+            }
+
+            actor = (Actor)Activator.CreateInstance(actortype);
+
+            return actor;
+        }
+
+        public void FindActor(string groupname ,string content)
+        {
+            Actor type = ActorTypes.Find(a => a.GetType().Name == groupname);
+
+            NewActor = GetActor(type.GetType().Name, content);
+        }
+
+        public void AddActor(int y, int x)
+        {
+            if(NewActor == null) return;
+
+            NewActor.SpawnGridActor(Board, Actors, y, x);
+
+            NewActor = null;
+        }
+
+        #endregion
 
         #region Date Increment
         void IncrementHour() => Hour++;
@@ -209,6 +382,7 @@ namespace PROG201_System_Project.systems
             Timer.Start();
         }
 
+        #region Tick Actions
         void CreatureTick(Creature creature)
         {
             creature.TickAction(Board, Actors);
@@ -263,7 +437,12 @@ namespace PROG201_System_Project.systems
                     PlantTick(actor as Plant);
                 }
             }
-        }
 
+            GetActorLists();
+
+            Weather.SetLandscapes(ActiveLandscapes);
+            Weather.SetPlants(ActivePlants);
+        }
+        #endregion
     }
 }
