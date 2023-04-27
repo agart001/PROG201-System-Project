@@ -70,25 +70,35 @@ namespace PROG201_System_Project.systems
         public List<Landscape> ActiveLandscapes = new List<Landscape>();
         public List<Plant> ActivePlants = new List<Plant>();
 
+        List<Creature> GetActiveCreatures()
+        {
+            List<Actor> list = Actors.Values.Where(a => a.IsCreature()).ToList();
+            List<Creature> converted_list = list.ConvertAll(c => (Creature)c);
+
+            return converted_list;
+        }
+
+        List<Landscape> GetActiveLandscapes()
+        {
+            List<Actor> list = Actors.Values.Where(a => a.IsLandscape()).ToList();
+            List<Landscape> converted_list = list.ConvertAll(l => (Landscape)l);
+
+            return converted_list;
+        }
+
+        List<Plant> GetActivePlants()
+        {
+            List<Actor> list = Actors.Values.Where(a => a.IsPlant()).ToList();
+            List<Plant> converted_list = list.ConvertAll(p => (Plant)p);
+
+            return converted_list;
+        }
+
         void GetActorLists()
         {
-            foreach(Actor actor in Actors.Values)
-            {
-                if(actor.IsCreature())
-                {
-                    ActiveCreatures.Add(actor as Creature);
-                }
-
-                if(actor.IsLandscape())
-                {
-                    ActiveLandscapes.Add(actor as Landscape);
-                }
-
-                if(actor.IsPlant())
-                {
-                    ActivePlants.Add(actor as Plant);
-                }
-            }
+            ActiveCreatures = GetActiveCreatures();
+            ActiveLandscapes = GetActiveLandscapes();
+            ActivePlants = GetActivePlants();
         }
         #endregion
 
@@ -407,6 +417,9 @@ namespace PROG201_System_Project.systems
 
         void Simulation_Tick(object sender, EventArgs e)
         {
+            GetActorLists();
+            GetCounts();
+
             int pastday = Day;
             IncrementTime();
 
@@ -438,7 +451,6 @@ namespace PROG201_System_Project.systems
                 }
             }
 
-            GetActorLists();
 
             Weather.SetLandscapes(ActiveLandscapes);
             Weather.SetPlants(ActivePlants);

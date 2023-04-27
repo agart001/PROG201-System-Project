@@ -4,6 +4,8 @@
              xmlns:local="clr-namespace:PROG201_System_Project"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <local:ObjectToString x:Key="ObjectString"/>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

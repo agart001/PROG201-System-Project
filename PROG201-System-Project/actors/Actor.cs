@@ -108,6 +108,18 @@ namespace PROG201_System_Project
         #endregion
 
         #region Actor Type
+
+        public bool IsType(object type)
+        {
+            bool confirm = false;
+            if (this as type != null)
+            {
+                confirm = true;
+            }
+
+            return confirm;
+        }
+
         public bool IsCreature() 
         {
             bool confirm = false;

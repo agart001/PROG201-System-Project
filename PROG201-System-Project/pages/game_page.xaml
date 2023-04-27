@@ -3,7 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:PROG201_System_Project.pages" xmlns:systems="clr-namespace:PROG201_System_Project.systems" d:DataContext="{d:DesignInstance Type=systems:Simulation}"
+      xmlns:local="clr-namespace:PROG201_System_Project.pages" xmlns:systems="clr-namespace:PROG201_System_Project.systems" xmlns:local1="clr-namespace:PROG201_System_Project" d:DataContext="{d:DesignInstance Type=systems:Simulation}"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="game_page"
@@ -66,20 +66,30 @@
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
 
-                <Grid Grid.Row="0" Grid.Column="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width=".5*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                    </Grid.RowDefinitions>
 
-                    <Label Grid.Column="0" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Moth" FontSize="10" Background="White"/>
-                    <TextBlock Grid.Column="1" Margin="2,2,2,2" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Path=CreatureCounts, UpdateSourceTrigger=PropertyChanged}" Background="Wheat"/>
-                </Grid>
+                <DataGrid Grid.Column="0" Margin="2" ItemsSource="{Binding CreatureCounts, UpdateSourceTrigger=PropertyChanged}"
+                          ColumnWidth=".5*" SelectionUnit="FullRow" AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Type" Binding="{Binding Key, Converter={StaticResource ObjectString}}"/>
+                        <DataGridTextColumn Header="Count" Binding="{Binding Value}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <DataGrid Grid.Column="1" Margin="2" ItemsSource="{Binding LandscapeCounts, UpdateSourceTrigger=PropertyChanged}"
+                          ColumnWidth=".5*" SelectionUnit="FullRow" AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Type" Binding="{Binding Key, Converter={StaticResource ObjectString}}"/>
+                        <DataGridTextColumn Header="Count" Binding="{Binding Value}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <DataGrid Grid.Column="2" Margin="2" ItemsSource="{Binding PlantsCounts, UpdateSourceTrigger=PropertyChanged}"
+                          ColumnWidth=".5*" SelectionUnit="FullRow" AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Type" Binding="{Binding Key, Converter={StaticResource ObjectString}}"/>
+                        <DataGridTextColumn Header="Count" Binding="{Binding Value}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
 
             </Grid>
 
