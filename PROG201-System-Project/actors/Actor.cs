@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -108,44 +109,10 @@ namespace PROG201_System_Project
         #endregion
 
         #region Actor Type
-
-        public bool IsType(object type)
+        public bool IsType(Type type)
         {
             bool confirm = false;
-            if (this as type != null)
-            {
-                confirm = true;
-            }
-
-            return confirm;
-        }
-
-        public bool IsCreature() 
-        {
-            bool confirm = false;
-            if(this as Creature != null)
-            {
-                confirm = true;
-            }
-
-            return confirm;
-        }
-
-        public bool IsPlant()
-        {
-            bool confirm = false;
-            if (this as Plant != null)
-            {
-                confirm = true;
-            }
-
-            return confirm;
-        }
-
-        public bool IsLandscape()
-        {
-            bool confirm = false;
-            if (this as Landscape != null)
+            if (this.GetType().IsSubclassOf(type))
             {
                 confirm = true;
             }

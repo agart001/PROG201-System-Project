@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -166,7 +170,29 @@ namespace PROG201_System_Project
             return GetCastDelegate(o.GetType(), t).Invoke(o);
         }
 
-        
+        public static IList CreateList(Type myType)
+        {
+            Type genericListType = typeof(List<>).MakeGenericType(myType);
+            return (IList)Activator.CreateInstance(genericListType);
+        }
+
+        public static Dictionary<K, V> CreateDict<K, V>()
+        {
+            Dictionary<K, V> dict = new Dictionary<K, V>();
+            return dict;
+        }
+
+        public static bool ObjectTypeEquals(object obj, Type type)
+        {
+            bool confirm = false;
+
+            if (obj.GetType() == type)
+            {
+                confirm = true;
+            }
+
+            return confirm;
+        }
     }
 
     public class ObjectToString : IValueConverter

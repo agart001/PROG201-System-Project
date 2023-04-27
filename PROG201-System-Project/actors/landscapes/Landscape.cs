@@ -23,19 +23,6 @@ namespace PROG201_System_Project.actors.landscapes
             TypeID = 0;
         }
 
-        #region Landscape Type
-        public bool IsWater()
-        {
-            bool confirm = false;
-            if (this as Water != null)
-            {
-                confirm = true;
-            }
-
-            return confirm;
-        }
-        #endregion
-
         #region Water Control
         public void DecrementWaterLevel(double value)
         {

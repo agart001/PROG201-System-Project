@@ -32,11 +32,12 @@ namespace PROG201_System_Project.pages
             InitializeComponent();
             Sim = new Simulation(grd_Board, 1);
 
-            grd_HUD.DataContext = Sim;
+            
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            grd_Page.DataContext = Sim;
         }
 
         private void Slow_Click(object sender, RoutedEventArgs e)

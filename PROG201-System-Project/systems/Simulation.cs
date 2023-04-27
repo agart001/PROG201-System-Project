@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -37,6 +38,10 @@ namespace PROG201_System_Project.systems
 
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
+            if(name == "LandscapeCounts")
+            {
+                int b = 5;
+            }
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
         #endregion
@@ -72,7 +77,7 @@ namespace PROG201_System_Project.systems
 
         List<Creature> GetActiveCreatures()
         {
-            List<Actor> list = Actors.Values.Where(a => a.IsCreature()).ToList();
+            List<Actor> list = Actors.Values.Where(a => a.IsType(typeof(Creature))).ToList();
             List<Creature> converted_list = list.ConvertAll(c => (Creature)c);
 
             return converted_list;
@@ -80,7 +85,7 @@ namespace PROG201_System_Project.systems
 
         List<Landscape> GetActiveLandscapes()
         {
-            List<Actor> list = Actors.Values.Where(a => a.IsLandscape()).ToList();
+            List<Actor> list = Actors.Values.Where(a => a.IsType(typeof(Landscape))).ToList();
             List<Landscape> converted_list = list.ConvertAll(l => (Landscape)l);
 
             return converted_list;
@@ -88,7 +93,7 @@ namespace PROG201_System_Project.systems
 
         List<Plant> GetActivePlants()
         {
-            List<Actor> list = Actors.Values.Where(a => a.IsPlant()).ToList();
+            List<Actor> list = Actors.Values.Where(a => a.IsType(typeof(Plant))).ToList();
             List<Plant> converted_list = list.ConvertAll(p => (Plant)p);
 
             return converted_list;
@@ -182,53 +187,50 @@ namespace PROG201_System_Project.systems
 
         private Dictionary<Creature, int> creaturecounts;
         private Dictionary<Landscape, int> landscapecounts;
-        private Dictionary<Plant, int> plantscounts;
+        private Dictionary<Plant, int> plantcounts;
 
         public Dictionary<Creature, int> CreatureCounts { get { return creaturecounts; } set { creaturecounts = value; OnPropertyChanged(); } }
         public Dictionary<Landscape, int> LandscapeCounts { get { return landscapecounts; } set { landscapecounts = value; OnPropertyChanged(); } }
-        public Dictionary<Plant, int> PlantsCounts { get { return plantscounts; } set { plantscounts= value; OnPropertyChanged(); } }
+        public Dictionary<Plant, int> PlantCounts { get { return plantcounts; } set { plantcounts= value; OnPropertyChanged(); } }
 
-        void GetCreatureCount(Creature creature)
+        void GetCount<T>(T obj, List<T> list, Dictionary<T, int> dict)
         {
-            List<Creature> active = ActiveCreatures.FindAll(c => c.ActorID == creature.ActorID).ToList();
-            CreatureCounts[creature] = active.Count;
+            Type type = obj.GetType();
+            IList active = CreateList(type);
+            active = list.FindAll(i => i.GetType() == obj.GetType()).ToList();
+            dict.Add(obj, active.Count);
         }
 
-        void GetLandscapeCount(Landscape landscape)
+        Dictionary<T, int> ResetCount<T>(List<T> type_list, List<T> active_list) where T : class
         {
-            List<Landscape> active = ActiveLandscapes.FindAll(l => l.ActorID == landscape.ActorID).ToList();
-            LandscapeCounts[landscape] = active.Count;
-        }
+            Type type = typeof(T);
+            Dictionary<T, int> dict = CreateDict<T, int>();
 
-        void GetPlantCount(Plant plant)
-        {
-            List<Plant> active = ActivePlants.FindAll(p => p.ActorID == plant.ActorID).ToList();
-            PlantsCounts[plant] = active.Count;
+            type_list.ForEach(a => GetCount(a, active_list, dict));
+
+            return dict;
+            
+            //IList list = (IList)Activator.CreateInstance(list_type);
         }
 
         void InitCounts()
         {
             CreatureCounts = new Dictionary<Creature, int>();
             LandscapeCounts = new Dictionary<Landscape, int>();
-            PlantsCounts = new Dictionary<Plant, int>();
-
-            CreatureTypes.ForEach(c => CreatureCounts.Add(c, 0));
-            LandscapeTypes.ForEach(l => LandscapeCounts.Add(l, 0));
-            PlantTypes.ForEach(p => PlantsCounts.Add(p, 0));
+            PlantCounts = new Dictionary<Plant, int>();
         }
 
         void GetCounts()
         {
-            CreatureTypes.ForEach(c => GetCreatureCount(c));
-            LandscapeTypes.ForEach(l => GetLandscapeCount(l));
-            PlantTypes.ForEach(p => GetPlantCount(p));
+            CreatureCounts = ResetCount(CreatureTypes, ActiveCreatures);
+            LandscapeCounts = ResetCount(LandscapeTypes, ActiveLandscapes);
+            PlantCounts = ResetCount(PlantTypes, ActivePlants);
         }
         #endregion
 
         public Simulation(Grid grid, double interval) 
         {
             GetAllTypes();
-
             InitCounts();
 
             DefaultInterval = TimeSpan.FromSeconds(interval);
@@ -241,7 +243,6 @@ namespace PROG201_System_Project.systems
             LoadActorsXML(Board, Actors);
 
             GetActorLists();
-
             GetCounts();
 
             Weather = new Weather(ActiveLandscapes, ActivePlants);
@@ -400,7 +401,7 @@ namespace PROG201_System_Project.systems
 
         void LandscapeTick(Landscape landscape)
         {
-            if (landscape.IsWater())
+            if (landscape.IsType(typeof(Water)))
             {
                 landscape.TickAction(Board, Actors);
             }
@@ -417,9 +418,6 @@ namespace PROG201_System_Project.systems
 
         void Simulation_Tick(object sender, EventArgs e)
         {
-            GetActorLists();
-            GetCounts();
-
             int pastday = Day;
             IncrementTime();
 
@@ -435,21 +433,24 @@ namespace PROG201_System_Project.systems
 
             foreach(var actor in Actors.Values)
             {
-                if (actor.IsCreature())
+                if (actor.IsType(typeof(Creature)))
                 {
                     CreatureTick(actor as Creature);
                 }
                 
-                if (actor.IsLandscape())
+                if (actor.IsType(typeof(Landscape)))
                 {
                     LandscapeTick(actor as Landscape);
                 }
 
-                if(actor.IsPlant())
+                if(actor.IsType(typeof(Plant)))
                 {
                     PlantTick(actor as Plant);
                 }
             }
+
+            GetActorLists();
+            GetCounts();
 
 
             Weather.SetLandscapes(ActiveLandscapes);
