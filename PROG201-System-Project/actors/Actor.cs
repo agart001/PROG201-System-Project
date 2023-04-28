@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -24,7 +25,7 @@ namespace PROG201_System_Project
 
         public Image Sprite = new Image();
 
-        public string ImageFile = "default";
+        public string ImageFile = "default.BMP";
 
         public int Grid_Y { get; set; }
         public int Grid_X { get; set; }
@@ -105,6 +106,32 @@ namespace PROG201_System_Project
             vector.X = actor.Grid_X - this.Grid_X;
             vector.Y = actor.Grid_Y - this.Grid_Y;
             return vector;
+        }
+
+        public T? FindNearest<T>(T? search_object, Grid grid, Dictionary<Image, Actor> actors)
+        {
+            Actor search_actor = (Actor)Cast(typeof(Actor), search_object);
+            List<Image> images = grid.Children.Cast<Image>().ToList();
+            List<Image> sprites = images.FindAll(i => ImageFileFromPath(i.Source.ToString()) == search_actor.ImageFile);
+
+            if (sprites.Count <= 0) return default;
+
+            int[] distances = new int[sprites.Count];
+            int index = 0;
+            foreach (Image sprite in sprites)
+            {
+                T instance = (T)Cast(typeof(T), actors[sprite]);
+                distances[index] = Math.Abs((int)DistanceToActor(instance as Actor).Length());
+                index++;
+            }
+
+            //int[] travelabledistances = distances.Where(i => i <= MaxMovement).ToArray();
+
+            int smallestdist = distances.Min();
+            int smallestindex = distances.ToList().FindIndex(i => i == smallestdist);
+            Image smallestsprite = sprites[smallestindex];
+
+            return (T)Cast(typeof(T), actors[smallestsprite]);
         }
         #endregion
 

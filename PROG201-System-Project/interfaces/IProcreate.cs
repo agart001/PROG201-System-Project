@@ -44,10 +44,10 @@ namespace PROG201_System_Project.interfaces
         public Actor BirthPlace { get; set; }
         public int BirthRange { get; set; }
 
-        public bool InSeason(string season);
-        public void IncreaseHappy();
-        public Actor FindNearestBirthPlace(Grid grid, Dictionary<Image, Actor> actors);
-        public Actor FindNearestMate(Grid grid, Dictionary<Image, Actor> actors);
-        public void GiveBirth(Grid grid, Dictionary<Image, Actor> actors);
+        void InSeason(string season);
+        void IncreaseHappy();
+        Actor FindNearestBirthPlace(Grid grid, Dictionary<Image, Actor> actors);
+        Actor FindNearestMate(Grid grid, Dictionary<Image, Actor> actors);
+        void GiveBirth(Grid grid, Dictionary<Image, Actor> actors);
     }
 }

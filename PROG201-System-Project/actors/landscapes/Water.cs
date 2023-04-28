@@ -13,7 +13,7 @@ namespace PROG201_System_Project.actors.landscapes
         public override void PreContruct()
         {
             ActorID = 0;
-            ImageFile = "water";
+            ImageFile = "water.BMP";
         }
 
         public override void PostContruct()

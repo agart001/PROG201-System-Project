@@ -1,16 +1,13 @@
-﻿using PROG201_System_Project.interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows;
 using PROG201_System_Project.actors.landscapes;
-using System.Windows.Media.Imaging;
 using static PROG201_System_Project.Utility;
 using System.Numerics;
 using PROG201_System_Project.actors.plants;
+using PROG201_System_Project.interfaces;
 
 namespace PROG201_System_Project.actors.creatures
 {
@@ -71,7 +68,6 @@ namespace PROG201_System_Project.actors.creatures
         private bool RToD; public bool ReadyToDeliver { get => RToD; set => RToD = value; }
 
         private bool RToM; public bool ReadyToMate { get => RToM; set => RToM = value; }
-
         private int maxhappy; public int MaxHappy { get => maxhappy; set => maxhappy = value; }
         private int happy; public int Happy { get => happy; set => happy = value; }
 
@@ -79,10 +75,14 @@ namespace PROG201_System_Project.actors.creatures
         private Actor birthplace; public Actor BirthPlace { get => birthplace; set => birthplace = value; }
         private int birthrange; public int BirthRange { get => birthrange; set => birthrange = value; }
 
-
-        public bool InSeason(string season)
+        
+        public void InSeason(string season)
         {
-            return true;
+            if(MatingSeason == season)
+            {
+                ReadyToMate = true;
+            }
+
         }
         public void IncreaseHappy()
         {
@@ -90,15 +90,15 @@ namespace PROG201_System_Project.actors.creatures
         }
         public Actor FindNearestBirthPlace(Grid grid, Dictionary<Image, Actor> actors)
         {
-
+            return FindNearest<Actor>(BirthPlace, grid, actors);
         }
         public Actor FindNearestMate(Grid grid, Dictionary<Image, Actor> actors)
         {
-            return new Actor();
+            return FindNearest<Actor>(Mate, grid, actors);
         }
         public void GiveBirth(Grid grid, Dictionary<Image, Actor> actors)
         {
-
+            int b = 5;
         }
         #endregion
 
@@ -240,6 +240,9 @@ namespace PROG201_System_Project.actors.creatures
         {
             //BitmapImage waterbmp = new BitmapImage(new Uri("{pack://application:,,,/images/water.BMP}"));
 
+            return FindNearest<Water>(new Water(), grid, actors);
+
+            /*
             List<Image> images = grid.Children.Cast<Image>().ToList();
             List<Image> watersprites = images.FindAll(i => ImageFileFromPath(i.Source.ToString()) == "water.BMP");
 
@@ -261,6 +264,7 @@ namespace PROG201_System_Project.actors.creatures
             Image smallestsprite = watersprites[smallestindex];
 
             return (Water)actors[smallestsprite];
+            */
         }
 
         public IFood FindNearestFood(Grid grid, Dictionary<Image, Actor> actors)
@@ -400,21 +404,6 @@ namespace PROG201_System_Project.actors.creatures
                     }
                 }
             }
-        }
-
-        public void FindNearestBirthPlace(Grid grid, Dictionary<Image, Actor> actors)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void FindNearestMate(Grid grid, Dictionary<Image, Actor> actors)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void GiveBirth(Grid grid, Dictionary<Image, Actor> actors)
-        {
-            throw new NotImplementedException();
         }
     }
 }

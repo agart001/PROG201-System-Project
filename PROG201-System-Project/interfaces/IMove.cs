@@ -12,12 +12,12 @@ namespace PROG201_System_Project.interfaces
 {
     public interface IMove
     {
-        public void Move(Grid grid, Image sprite, int move_y, int move_x);
+        void Move(Grid grid, Image sprite, int move_y, int move_x);
 
-        public void MoveToActor(Grid grid, Actor actor);
+        void MoveToActor(Grid grid, Actor actor);
 
-        public UIElement CheckGridCollision(Grid grid, int y, int x);
+        UIElement CheckGridCollision(Grid grid, int y, int x);
 
-        public void MoveRandom(Grid grid);
+        void MoveRandom(Grid grid);
     }
 }
