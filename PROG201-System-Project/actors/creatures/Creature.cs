@@ -14,7 +14,7 @@ using PROG201_System_Project.actors.plants;
 
 namespace PROG201_System_Project.actors.creatures
 {
-    public class Creature : Actor, IMove, IFood
+    public class Creature : Actor, IMove, IFood, IProcreate
     {
 
         public enum VoreType
@@ -55,6 +55,52 @@ namespace PROG201_System_Project.actors.creatures
             TypeID = 2;
         }
 
+        #region IProcreate
+        IProcreate.ChromesomeType IProcreate.Chromesome { get; set; }
+        IProcreate.BirthType IProcreate.Birth { get; set; }
+
+        private Actor mate; public Actor Mate { get => mate; set => mate = value; }
+
+        private int maxoffspring; public int MaxOffspring { get => maxoffspring; set => maxoffspring = value; }
+
+        private List<Actor> offspring; public List<Actor> Offspring { get => offspring; set => offspring = value; }
+
+        private int maxgestation; public int MaxGestation { get => maxgestation; set => maxgestation = value; }
+        private int gestation; public int Gestation { get => gestation; set => gestation = value; }
+        private bool gestating; public bool Gestating { get => gestating; set => gestating = value; }
+        private bool RToD; public bool ReadyToDeliver { get => RToD; set => RToD = value; }
+
+        private bool RToM; public bool ReadyToMate { get => RToM; set => RToM = value; }
+
+        private int maxhappy; public int MaxHappy { get => maxhappy; set => maxhappy = value; }
+        private int happy; public int Happy { get => happy; set => happy = value; }
+
+        private string matingseason; public string MatingSeason { get => matingseason; set => matingseason = value; }
+        private Actor birthplace; public Actor BirthPlace { get => birthplace; set => birthplace = value; }
+        private int birthrange; public int BirthRange { get => birthrange; set => birthrange = value; }
+
+
+        public bool InSeason(string season)
+        {
+            return true;
+        }
+        public void IncreaseHappy()
+        {
+
+        }
+        public Actor FindNearestBirthPlace(Grid grid, Dictionary<Image, Actor> actors)
+        {
+
+        }
+        public Actor FindNearestMate(Grid grid, Dictionary<Image, Actor> actors)
+        {
+            return new Actor();
+        }
+        public void GiveBirth(Grid grid, Dictionary<Image, Actor> actors)
+        {
+
+        }
+        #endregion
 
         #region IFood
 
@@ -354,6 +400,21 @@ namespace PROG201_System_Project.actors.creatures
                     }
                 }
             }
+        }
+
+        public void FindNearestBirthPlace(Grid grid, Dictionary<Image, Actor> actors)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void FindNearestMate(Grid grid, Dictionary<Image, Actor> actors)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void GiveBirth(Grid grid, Dictionary<Image, Actor> actors)
+        {
+            throw new NotImplementedException();
         }
     }
 }
