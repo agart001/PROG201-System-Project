@@ -56,7 +56,7 @@ namespace PROG201_System_Project.actors.creatures
         IProcreate.ChromesomeType IProcreate.Chromesome { get; set; }
         IProcreate.BirthType IProcreate.Birth { get; set; }
 
-        private Actor mate; public Actor Mate { get => mate; set => mate = value; }
+        private Actor nearestmate; public Actor NearestMate { get => nearestmate; set => nearestmate = value; }
 
         private int maxoffspring; public int MaxOffspring { get => maxoffspring; set => maxoffspring = value; }
 
@@ -94,7 +94,7 @@ namespace PROG201_System_Project.actors.creatures
         }
         public Actor FindNearestMate(Grid grid, Dictionary<Image, Actor> actors)
         {
-            return FindNearest<Actor>(Mate, grid, actors);
+            return FindNearest<Actor>(this, grid, actors);
         }
         public void GiveBirth(Grid grid, Dictionary<Image, Actor> actors)
         {
@@ -236,63 +236,9 @@ namespace PROG201_System_Project.actors.creatures
         #endregion
 
         #region Pathing
-        public Water FindNearestWater(Grid grid, Dictionary<Image, Actor> actors)
-        {
-            //BitmapImage waterbmp = new BitmapImage(new Uri("{pack://application:,,,/images/water.BMP}"));
+        public Water FindNearestWater(Grid grid, Dictionary<Image, Actor> actors) => FindNearest<Water>(new Water(), grid, actors);
 
-            return FindNearest<Water>(new Water(), grid, actors);
-
-            /*
-            List<Image> images = grid.Children.Cast<Image>().ToList();
-            List<Image> watersprites = images.FindAll(i => ImageFileFromPath(i.Source.ToString()) == "water.BMP");
-
-            if (watersprites.Count <= 0) return null;
-
-            int[] distances = new int[watersprites.Count];
-            int index = 0;
-            foreach(Image watersprite in watersprites)
-            {
-                Water water = (Water)actors[watersprite];
-                distances[index] = Math.Abs((int)DistanceToActor(water).Length());
-                index++;
-            }
-
-            //int[] travelabledistances = distances.Where(i => i <= MaxMovement).ToArray();
-
-            int smallestdist = distances.Min();
-            int smallestindex = distances.ToList().FindIndex(i=> i == smallestdist);
-            Image smallestsprite = watersprites[smallestindex];
-
-            return (Water)actors[smallestsprite];
-            */
-        }
-
-        public IFood FindNearestFood(Grid grid, Dictionary<Image, Actor> actors)
-        {
-            //BitmapImage waterbmp = new BitmapImage(new Uri("{pack://application:,,,/images/water.BMP}"));
-            Actor FoodActor = PreferredFood as Actor;
-            List<Image> images = grid.Children.Cast<Image>().ToList();
-            List<Image> foodsprites = images.FindAll(i => ImageFileFromPath(i.Source.ToString()) == ImageFileFromPath(FoodActor.Sprite.Source.ToString()));
-
-            if (foodsprites.Count <= 0) return null;
-
-            int[] distances = new int[foodsprites.Count];
-            int index = 0;
-            foreach (Image watersprite in foodsprites)
-            {
-                IFood food = (IFood)actors[watersprite];
-                distances[index] = Math.Abs((int)DistanceToActor(food as Actor).Length());
-                index++;
-            }
-
-            //int[] travelabledistances = distances.Where(i => i <= MaxMovement).ToArray();
-
-            int smallestdist = distances.Min();
-            int smallestindex = distances.ToList().FindIndex(i => i == smallestdist);
-            Image smallestsprite = foodsprites[smallestindex];
-
-            return (IFood)actors[smallestsprite];
-        }
+        public IFood FindNearestFood(Grid grid, Dictionary<Image, Actor> actors) => FindNearest<IFood>(PreferredFood, grid, actors);
 
         #endregion
 
@@ -356,6 +302,8 @@ namespace PROG201_System_Project.actors.creatures
         public override void TickAction(Grid grid, Dictionary<Image, Actor> actors)
         {
             GetCurrentPosition();
+
+            NearestFood = FindNearestFood(grid, actors);
 
             ApplyMR();
 

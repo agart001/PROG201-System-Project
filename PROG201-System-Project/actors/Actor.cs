@@ -4,6 +4,7 @@ using PROG201_System_Project.actors.plants;
 using PROG201_System_Project.interfaces;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.CompilerServices;
@@ -108,9 +109,20 @@ namespace PROG201_System_Project
             return vector;
         }
 
+        Image SmallestSprite(int[] distances, List<Image> sprites)
+        {
+            int smallestdist = distances.Min();
+            int smallestindex = distances.ToList().FindIndex(i => i == smallestdist);
+            Image smallestsprite = sprites[smallestindex];
+
+            return smallestsprite;
+        }
+
         public T? FindNearest<T>(T? search_object, Grid grid, Dictionary<Image, Actor> actors)
         {
             Actor search_actor = (Actor)Cast(typeof(Actor), search_object);
+            IReadOnlyDictionary<Image, Actor> read_actors = actors.Where(a => a.Key != this.Sprite).ToDictionary(p => p.Key, p => p.Value);
+
             List<Image> images = grid.Children.Cast<Image>().ToList();
             List<Image> sprites = images.FindAll(i => ImageFileFromPath(i.Source.ToString()) == search_actor.ImageFile);
 
@@ -120,7 +132,7 @@ namespace PROG201_System_Project
             int index = 0;
             foreach (Image sprite in sprites)
             {
-                T instance = (T)Cast(typeof(T), actors[sprite]);
+                T instance = (T)Cast(typeof(T), read_actors[sprite]);
                 distances[index] = Math.Abs((int)DistanceToActor(instance as Actor).Length());
                 index++;
             }
@@ -130,6 +142,7 @@ namespace PROG201_System_Project
             int smallestdist = distances.Min();
             int smallestindex = distances.ToList().FindIndex(i => i == smallestdist);
             Image smallestsprite = sprites[smallestindex];
+
 
             return (T)Cast(typeof(T), actors[smallestsprite]);
         }

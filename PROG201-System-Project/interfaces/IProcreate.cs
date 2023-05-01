@@ -26,7 +26,7 @@ namespace PROG201_System_Project.interfaces
 
         public BirthType Birth { get; set; }
 
-        public Actor Mate { get; set; }
+        public Actor NearestMate { get; set; }
 
         public int MaxOffspring { get; set; }
         public List<Actor> Offspring { get; set; }
