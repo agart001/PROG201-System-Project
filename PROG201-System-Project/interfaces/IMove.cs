@@ -19,5 +19,7 @@ namespace PROG201_System_Project.interfaces
         UIElement CheckGridCollision(Grid grid, int y, int x);
 
         void MoveRandom(Grid grid);
+
+        void MoveThenExcute<T>(T obj, Action method, Grid grid);
     }
 }

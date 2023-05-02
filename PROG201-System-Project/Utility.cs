@@ -18,6 +18,7 @@ using System.Xml;
 using PROG201_System_Project.actors.creatures;
 using PROG201_System_Project.actors.landscapes;
 using PROG201_System_Project.actors.plants;
+using PROG201_System_Project.interfaces;
 
 namespace PROG201_System_Project
 {
@@ -30,6 +31,15 @@ namespace PROG201_System_Project
         public static void CloseApp() => Environment.Exit(0);
 
         public static int GetHypotenuse(int a, int b) => (int)Math.Sqrt(Math.Pow(a, 2) + Math.Pow(b, 2));
+
+        public static void Increment(dynamic inc, dynamic val, dynamic max)
+        {
+            if (inc + val > max)
+            {
+                inc = max;
+            }
+            else { inc += val; }
+        }
 
         public static Brush BrushFromString(string str)
         {
@@ -57,6 +67,7 @@ namespace PROG201_System_Project
             return file;
         }
 
+        #region XML Load Actors
         static Actor ParseLandscape(int id)
         {
             Actor actor = null;
@@ -137,8 +148,9 @@ namespace PROG201_System_Project
 
             }
         }
+        #endregion
 
-
+        #region Cast
         private static Func<object, object> MakeCastDelegate(Type from, Type to)
         {
             var p = Expression.Parameter(typeof(object)); //do not inline
@@ -169,6 +181,14 @@ namespace PROG201_System_Project
         {
             return GetCastDelegate(o.GetType(), t).Invoke(o);
         }
+        #endregion
+
+        #region Create Numerable
+        public static O CreateInstance<O>()
+        {
+            Type t = typeof(O);
+            return (O)Activator.CreateInstance(t);
+        }
 
         public static IList CreateList(Type myType)
         {
@@ -182,7 +202,47 @@ namespace PROG201_System_Project
             return dict;
         }
 
-        public static bool ObjectTypeEquals(object obj, Type type)
+        public static List<V> ValueList<K, V>(Dictionary<K, V> dict)
+        {
+            return dict.Values.ToList();
+        }
+
+        public static List<K> KeyList<K, V>(Dictionary<K, V> dict)
+        {
+            return dict.Keys.ToList();
+        }
+
+        public static IReadOnlyDictionary<K, V> CreateReadOnlyDict<K, V>(Dictionary<K, V> dict) => dict;
+
+        public static IReadOnlyDictionary<K, V> CreateReadOnlyDict<K, V>(Dictionary<K, V> dict, Type type) => 
+            dict.Where(a => ObjectIs(a.Value, type)).
+                 ToDictionary(p => p.Key, p => p.Value);
+
+        public static IReadOnlyDictionary<K, V> CreateReadOnlyDict<K, V>(Dictionary<K, V> dict, Type type, Actor caller, Func<V, bool> method) =>
+            dict.Where(a => !a.Value.Equals(caller) && ObjectIs(a.Value, type) && method(a.Value)).
+                 ToDictionary(p => p.Key, p => p.Value);
+
+        public static IReadOnlyDictionary<K, V> CreateReadOnlyDict<K, V>(Dictionary<K, V> dict, Type type, Actor caller, Func<IProcreate, bool> method) =>
+            dict.Where(a => !a.Value.Equals(caller) && ObjectIs(a.Value, type) && method(a.Value as IProcreate)).
+                 ToDictionary(p => p.Key, p => p.Value);
+
+        #endregion
+
+        #region Type
+        public static bool ObjectIs<T>(object obj)
+        {
+            bool confirm = false;
+            Type type = obj.GetType();
+
+            if (type.GetInterfaces().Contains(typeof(T)))
+            {
+                confirm = true;
+            }
+
+            return confirm;
+        }
+
+        public static bool ObjectIs(object obj, Type type)
         {
             bool confirm = false;
 
@@ -193,6 +253,7 @@ namespace PROG201_System_Project
 
             return confirm;
         }
+        #endregion
     }
 
     public class ObjectToString : IValueConverter

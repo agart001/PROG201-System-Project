@@ -8,12 +8,14 @@ using static PROG201_System_Project.Utility;
 using System.Numerics;
 using PROG201_System_Project.actors.plants;
 using PROG201_System_Project.interfaces;
+using static PROG201_System_Project.interfaces.IProcreate;
+using System.Runtime.Serialization;
 
 namespace PROG201_System_Project.actors.creatures
 {
     public class Creature : Actor, IMove, IFood, IProcreate
     {
-
+        #region Creature
         public enum VoreType
         {
             Herbivore,
@@ -23,8 +25,9 @@ namespace PROG201_System_Project.actors.creatures
 
         public VoreType Vore { get; set; }
 
-
         public bool Alive { get; set; }
+
+        public Actor Home { get; set; }
 
         public int MaxMovement { get; set; }
 
@@ -51,10 +54,11 @@ namespace PROG201_System_Project.actors.creatures
         {
             TypeID = 2;
         }
+        #endregion
 
         #region IProcreate
-        IProcreate.ChromesomeType IProcreate.Chromesome { get; set; }
-        IProcreate.BirthType IProcreate.Birth { get; set; }
+        private ChromesomeType chromesome; public ChromesomeType Chromesome { get => chromesome; set => chromesome = value; }
+        private BirthType birth; public BirthType Birth { get => birth; set => birth = value; }
 
         private Actor nearestmate; public Actor NearestMate { get => nearestmate; set => nearestmate = value; }
 
@@ -68,6 +72,8 @@ namespace PROG201_System_Project.actors.creatures
         private bool RToD; public bool ReadyToDeliver { get => RToD; set => RToD = value; }
 
         private bool RToM; public bool ReadyToMate { get => RToM; set => RToM = value; }
+
+        private bool L4M; public bool LookForMate { get => L4M; set => L4M = value; }
         private int maxhappy; public int MaxHappy { get => maxhappy; set => maxhappy = value; }
         private int happy; public int Happy { get => happy; set => happy = value; }
 
@@ -75,7 +81,6 @@ namespace PROG201_System_Project.actors.creatures
         private Actor birthplace; public Actor BirthPlace { get => birthplace; set => birthplace = value; }
         private int birthrange; public int BirthRange { get => birthrange; set => birthrange = value; }
 
-        
         public void InSeason(string season)
         {
             if(MatingSeason == season)
@@ -86,16 +91,39 @@ namespace PROG201_System_Project.actors.creatures
         }
         public void IncreaseHappy()
         {
+            if (ReadyToMate)
+            {
+                if(Happy++ >= MaxHappy)
+                {
+                    Happy = MaxHappy;
+                }
+                else { Happy++; }
+            }
+        }
 
-        }
-        public Actor FindNearestBirthPlace(Grid grid, Dictionary<Image, Actor> actors)
+        public void CheckHappy()
         {
-            return FindNearest<Actor>(BirthPlace, grid, actors);
+            if(Happy == MaxHappy) LookForMate = true;
         }
+
+        public Actor FindNearestBirthPlace(Grid grid, Dictionary<Image, Actor> actors) => FindNearest(BirthPlace, actors);
+
         public Actor FindNearestMate(Grid grid, Dictionary<Image, Actor> actors)
         {
-            return FindNearest<Actor>(this, grid, actors);
+            Type type = GetType();
+            switch(Chromesome)
+            {
+                case ChromesomeType.X: return FindNearest(this, CreateReadOnlyDict(actors, type, this, a => a.Chromesome == ChromesomeType.X));
+                case ChromesomeType.Y: return FindNearest(this, CreateReadOnlyDict(actors, type, this, a => a.Chromesome == ChromesomeType.Y));
+                default: return null;
+            }
         }
+
+        public void Procreate(Actor NearestMate)
+        {
+            
+        }
+
         public void GiveBirth(Grid grid, Dictionary<Image, Actor> actors)
         {
             int b = 5;
@@ -181,6 +209,23 @@ namespace PROG201_System_Project.actors.creatures
             Move(grid, Sprite, (int)vec.Y, (int)vec.X);
         }
 
+        public void MoveThenExcute<T>(T obj, Action method, Grid grid)
+        {
+            if (obj != null)
+            {
+                Vector2 vec = DistanceToActor(obj as Actor);
+                int dist = (int)vec.Length();
+                if (dist > 0)
+                {
+                    MoveToActor(grid, obj as Actor);
+                }
+                else
+                {
+                    method();
+                }
+            }
+        }
+
         #endregion
 
         #region Checks
@@ -236,13 +281,15 @@ namespace PROG201_System_Project.actors.creatures
         #endregion
 
         #region Pathing
-        public Water FindNearestWater(Grid grid, Dictionary<Image, Actor> actors) => FindNearest<Water>(new Water(), grid, actors);
+        public Water FindNearestWater(Grid grid, Dictionary<Image, Actor> actors) => FindNearest(new Water(), CreateReadOnlyDict(actors, typeof(Water)));
 
-        public IFood FindNearestFood(Grid grid, Dictionary<Image, Actor> actors) => FindNearest<IFood>(PreferredFood, grid, actors);
+        public IFood FindNearestFood(Grid grid, Dictionary<Image, Actor> actors) => FindNearest(PreferredFood, CreateReadOnlyDict(actors, PreferredFood.GetType()));
 
         #endregion
 
         #region Eat & Drink
+        
+
         public void Drink(Water water)
         {
             if (water.WaterDepleted != true)
@@ -250,11 +297,9 @@ namespace PROG201_System_Project.actors.creatures
                 if(Hydration < MaxHydration)
                 {
                     water.DecrementWaterLevel(WaterIntake);
-                    if(Hydration + WaterIntake > MaxHydration)
-                    {
-                        Hydration = MaxHydration;
-                    }
-                    else { Hydration += WaterIntake; }
+                    Increment(Hydration, WaterIntake, MaxHydration);
+
+                    IncreaseHappy();
                 }
             }
         }
@@ -270,6 +315,8 @@ namespace PROG201_System_Project.actors.creatures
                     EatCreature(food);
                     break;
             }
+            
+            IncreaseHappy();
         }
 
         void EatCreature(IFood food)
@@ -278,7 +325,7 @@ namespace PROG201_System_Project.actors.creatures
             if (creature.Health - AttackDamage >= 0)
             {
                 creature.Eaten = true;
-                Hunger += creature.Calories;
+                Increment(Hunger, creature.Calories, MaxHunger);
             }
             else
             {
@@ -293,8 +340,11 @@ namespace PROG201_System_Project.actors.creatures
             Plant plant = food as Plant;
             if(plant.Eaten != true)
             {
-                plant.FruitAmount -= 1;
-                Hunger += plant.Calories;
+                if(plant.FruitAmount > 0)
+                {
+                    plant.FruitAmount--;
+                    Increment(Hunger, plant.Calories, MaxHunger);
+                }
             }
         }
         #endregion
@@ -302,8 +352,6 @@ namespace PROG201_System_Project.actors.creatures
         public override void TickAction(Grid grid, Dictionary<Image, Actor> actors)
         {
             GetCurrentPosition();
-
-            NearestFood = FindNearestFood(grid, actors);
 
             ApplyMR();
 
@@ -320,37 +368,19 @@ namespace PROG201_System_Project.actors.creatures
             if(Thirsty)
             {
                 NearestWater = FindNearestWater(grid, actors);
-                if (NearestWater != null)
-                {
-                    Vector2 vec = DistanceToActor(NearestWater);
-                    int dist = (int)vec.Length();
-                    if(dist > 0)
-                    {
-                        MoveToActor(grid, NearestWater);
-                    }
-                    else
-                    {
-                        Drink(NearestWater);
-                    }
-                }
+                MoveThenExcute(NearestWater, () => Drink(NearestWater), grid);
             }
 
             if (Hungery)
             {
                 NearestFood = FindNearestFood(grid, actors);
-                if (NearestFood != null)
-                {
-                    Vector2 vec = DistanceToActor(NearestFood as Actor);
-                    int dist = (int)vec.Length();
-                    if (dist > 0)
-                    {
-                        MoveToActor(grid, NearestFood as Actor);
-                    }
-                    else
-                    {
-                        Eat(NearestFood);
-                    }
-                }
+                MoveThenExcute(NearestFood, () => Eat(NearestFood), grid);
+            }
+
+            if (LookForMate)
+            {
+                NearestMate = FindNearestMate(grid, actors);
+                MoveThenExcute(NearestMate, () => Procreate(NearestMate), grid);
             }
         }
     }

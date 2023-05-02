@@ -7,7 +7,7 @@ using System.Windows.Controls;
 
 namespace PROG201_System_Project.interfaces
 {
-    internal interface IProcreate
+    public interface IProcreate
     {
         public enum ChromesomeType
         {
@@ -37,6 +37,7 @@ namespace PROG201_System_Project.interfaces
         public bool ReadyToDeliver { get; set; }
 
         public bool ReadyToMate { get; set; }
+        public bool LookForMate { get; set; }
         public int MaxHappy { get; set; }
         public int Happy { get; set; }
 
@@ -46,8 +47,12 @@ namespace PROG201_System_Project.interfaces
 
         void InSeason(string season);
         void IncreaseHappy();
+        void CheckHappy();
+
         Actor FindNearestBirthPlace(Grid grid, Dictionary<Image, Actor> actors);
         Actor FindNearestMate(Grid grid, Dictionary<Image, Actor> actors);
+
+        void Procreate(Actor nearestmate);
         void GiveBirth(Grid grid, Dictionary<Image, Actor> actors);
     }
 }

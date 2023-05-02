@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static PROG201_System_Project.Utility;
 
 namespace PROG201_System_Project.actors.creatures
 {
@@ -19,6 +20,7 @@ namespace PROG201_System_Project.actors.creatures
 
         public override void PostContruct()
         {
+            #region Creature
             Vore = VoreType.Herbivore;
 
             Alive = true;
@@ -30,17 +32,42 @@ namespace PROG201_System_Project.actors.creatures
             AttackDamage = 2;
 
             MaxHydration = 20;
-            Hydration = 20;
+            Hydration = 15;
             HydrationMR = .5;
             WaterIntake = 5;
 
             MaxHunger = 20;
             Hunger = 20;
-            HungerMR = 0;
+            HungerMR = .5;
             PreferredFood = new Yucca();
+            #endregion
 
+            #region IFood
             Calories = 5;
             Eaten = false;
+            #endregion
+
+            #region IProcreate
+            Chromesome = (IProcreate.ChromesomeType)Rand.Next(0, 1);
+            Birth = IProcreate.BirthType.Eggs;
+
+            MaxOffspring = 5;
+
+            MaxGestation = 5;
+            Gestation = 0;
+            Gestating = false;
+            ReadyToDeliver = false;
+
+            ReadyToMate = false;
+            LookForMate = false;
+
+            MaxHappy = 10;
+            Happy = 0;
+
+            MatingSeason = "Spring";
+            BirthPlace = new Yucca();
+            BirthRange = 5;
+            #endregion
 
             //Thirsty = true;
         }

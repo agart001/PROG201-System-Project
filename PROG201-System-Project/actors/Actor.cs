@@ -109,42 +109,30 @@ namespace PROG201_System_Project
             return vector;
         }
 
-        Image SmallestSprite(int[] distances, List<Image> sprites)
+        public T FindNearest<T, K, V>(T search_object, IReadOnlyDictionary<K, V> read_actors)
         {
-            int smallestdist = distances.Min();
-            int smallestindex = distances.ToList().FindIndex(i => i == smallestdist);
-            Image smallestsprite = sprites[smallestindex];
-
-            return smallestsprite;
-        }
-
-        public T? FindNearest<T>(T? search_object, Grid grid, Dictionary<Image, Actor> actors)
-        {
+            Type search_type = search_object.GetType();
             Actor search_actor = (Actor)Cast(typeof(Actor), search_object);
-            IReadOnlyDictionary<Image, Actor> read_actors = actors.Where(a => a.Key != this.Sprite).ToDictionary(p => p.Key, p => p.Value);
 
-            List<Image> images = grid.Children.Cast<Image>().ToList();
-            List<Image> sprites = images.FindAll(i => ImageFileFromPath(i.Source.ToString()) == search_actor.ImageFile);
+            List<K> keys = KeyList((Dictionary<K, V>)read_actors);
 
-            if (sprites.Count <= 0) return default;
+            if (keys.Count <= 0) return default;
 
-            int[] distances = new int[sprites.Count];
+            int[] distances = new int[keys.Count];
             int index = 0;
-            foreach (Image sprite in sprites)
+            foreach (K key in keys)
             {
-                T instance = (T)Cast(typeof(T), read_actors[sprite]);
+                T instance = (T)Cast(typeof(T), read_actors[key]);
                 distances[index] = Math.Abs((int)DistanceToActor(instance as Actor).Length());
                 index++;
             }
 
-            //int[] travelabledistances = distances.Where(i => i <= MaxMovement).ToArray();
-
             int smallestdist = distances.Min();
             int smallestindex = distances.ToList().FindIndex(i => i == smallestdist);
-            Image smallestsprite = sprites[smallestindex];
+            K smallestkey = keys[smallestindex];
 
 
-            return (T)Cast(typeof(T), actors[smallestsprite]);
+            return (T)Cast(typeof(T), read_actors[smallestkey]);
         }
         #endregion
 

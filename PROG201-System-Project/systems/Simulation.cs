@@ -12,6 +12,7 @@ using System.Windows.Threading;
 using PROG201_System_Project.actors.creatures;
 using PROG201_System_Project.actors.landscapes;
 using PROG201_System_Project.actors.plants;
+using PROG201_System_Project.interfaces;
 using static PROG201_System_Project.Utility;
 
 
@@ -416,6 +417,13 @@ namespace PROG201_System_Project.systems
             plant.TickAction();
         }
 
+        void CheckProcreators(List<Actor> actors, string season)
+        {
+            List<IProcreate> procreators = new List<IProcreate>(actors.Where(a => ObjectIs<IProcreate>(a)).ToList().Cast<IProcreate>());
+
+            procreators.ForEach(p => p.InSeason(season));
+        }
+
         void Simulation_Tick(object sender, EventArgs e)
         {
             int pastday = Day;
@@ -452,6 +460,7 @@ namespace PROG201_System_Project.systems
             GetActorLists();
             GetCounts();
 
+            CheckProcreators(ValueList(Actors), CurrentSeason);
 
             Weather.SetLandscapes(ActiveLandscapes);
             Weather.SetPlants(ActivePlants);
