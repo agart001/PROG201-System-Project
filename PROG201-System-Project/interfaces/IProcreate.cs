@@ -46,13 +46,21 @@ namespace PROG201_System_Project.interfaces
         public int BirthRange { get; set; }
 
         void InSeason(string season);
+        void IsGestating();
+
         void IncreaseHappy();
+        void IncreaseGestation();
+
         void CheckHappy();
+        void CheckGestation();
 
         Actor FindNearestBirthPlace(Grid grid, Dictionary<Image, Actor> actors);
         Actor FindNearestMate(Grid grid, Dictionary<Image, Actor> actors);
 
-        void Procreate(Actor nearestmate);
+        void Procreate();
+
+        void CreateOffspring(int amount);
+
         void GiveBirth(Grid grid, Dictionary<Image, Actor> actors);
     }
 }

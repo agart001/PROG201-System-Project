@@ -32,13 +32,13 @@ namespace PROG201_System_Project
 
         public static int GetHypotenuse(int a, int b) => (int)Math.Sqrt(Math.Pow(a, 2) + Math.Pow(b, 2));
 
-        public static void Increment(dynamic inc, dynamic val, dynamic max)
+        public static void Increment(dynamic val, dynamic inc, dynamic max)
         {
-            if (inc + val > max)
+            if (val + inc > max)
             {
-                inc = max;
+                val = max;
             }
-            else { inc += val; }
+            else { val += inc; }
         }
 
         public static Brush BrushFromString(string str)
@@ -184,11 +184,7 @@ namespace PROG201_System_Project
         #endregion
 
         #region Create Numerable
-        public static O CreateInstance<O>()
-        {
-            Type t = typeof(O);
-            return (O)Activator.CreateInstance(t);
-        }
+        public static O CreateInstance<O>(Type t) => (O)Activator.CreateInstance(t);
 
         public static IList CreateList(Type myType)
         {
@@ -223,7 +219,7 @@ namespace PROG201_System_Project
                  ToDictionary(p => p.Key, p => p.Value);
 
         public static IReadOnlyDictionary<K, V> CreateReadOnlyDict<K, V>(Dictionary<K, V> dict, Type type, Actor caller, Func<IProcreate, bool> method) =>
-            dict.Where(a => !a.Value.Equals(caller) && ObjectIs(a.Value, type) && method(a.Value as IProcreate)).
+            dict.Where(a => !a.Value.Equals(caller) && ObjectIs(a.Value, type) && method((IProcreate)a.Value)).
                  ToDictionary(p => p.Key, p => p.Value);
 
         #endregion

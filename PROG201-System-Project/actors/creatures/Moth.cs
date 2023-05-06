@@ -49,7 +49,6 @@ namespace PROG201_System_Project.actors.creatures
 
             #region IProcreate
             Chromesome = (IProcreate.ChromesomeType)Rand.Next(0, 1);
-            Birth = IProcreate.BirthType.Eggs;
 
             MaxOffspring = 5;
 

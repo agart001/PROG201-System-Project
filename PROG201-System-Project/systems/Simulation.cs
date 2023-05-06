@@ -419,9 +419,16 @@ namespace PROG201_System_Project.systems
 
         void CheckProcreators(List<Actor> actors, string season)
         {
-            List<IProcreate> procreators = new List<IProcreate>(actors.Where(a => ObjectIs<IProcreate>(a)).ToList().Cast<IProcreate>());
+            List<IProcreate> procreators = new List<IProcreate>((IEnumerable<IProcreate>)actors.Where(a => ObjectIs<IProcreate>(a)));
 
             procreators.ForEach(p => p.InSeason(season));
+        }
+
+        void CheckGestation(List<Actor> actors)
+        {
+            List<IProcreate> procreators = new List<IProcreate>((IEnumerable<IProcreate>)actors.Where(a => ObjectIs<IProcreate>(a)));
+
+            procreators.Where(p => p.Gestating).ToList().ForEach(i => i.IncreaseGestation());
         }
 
         void Simulation_Tick(object sender, EventArgs e)
@@ -434,6 +441,8 @@ namespace PROG201_System_Project.systems
                 Weather.TickAction(currentseason);
 
                 WeatherType = Weather.CurrentType.ToString();
+
+                CheckGestation(ValueList(Actors));
             }
 
             Weather.ApplyEvaporation();
@@ -441,19 +450,19 @@ namespace PROG201_System_Project.systems
 
             foreach(var actor in Actors.Values)
             {
-                if (actor.IsType(typeof(Creature)))
+                if (ObjectIs<Creature>(actor))
                 {
-                    CreatureTick(actor as Creature);
+                    CreatureTick((Creature)actor);
                 }
                 
-                if (actor.IsType(typeof(Landscape)))
+                if (ObjectIs<Landscape>(actor))
                 {
-                    LandscapeTick(actor as Landscape);
+                    LandscapeTick((Landscape)actor);
                 }
 
-                if(actor.IsType(typeof(Plant)))
+                if(ObjectIs<Plant>(actor))
                 {
-                    PlantTick(actor as Plant);
+                    PlantTick((Plant)actor);
                 }
             }
 

@@ -40,14 +40,12 @@ namespace PROG201_System_Project.actors.creatures
         public double Hydration { get; set; }
         public double HydrationMR { get; set; }
         public double WaterIntake { get; set; }
-        Water NearestWater { get; set; }
 
         public bool Hungery { get; set; }
         public int MaxHunger { get; set; }
         public double Hunger { get; set; }
         public double HungerMR { get; set; }
         public IFood PreferredFood { get; set; }
-        IFood NearestFood { get; set; }
 
 
         public override void ParentPreConstruct()
@@ -59,9 +57,6 @@ namespace PROG201_System_Project.actors.creatures
         #region IProcreate
         private ChromesomeType chromesome; public ChromesomeType Chromesome { get => chromesome; set => chromesome = value; }
         private BirthType birth; public BirthType Birth { get => birth; set => birth = value; }
-
-        private Actor nearestmate; public Actor NearestMate { get => nearestmate; set => nearestmate = value; }
-
         private int maxoffspring; public int MaxOffspring { get => maxoffspring; set => maxoffspring = value; }
 
         private List<Actor> offspring; public List<Actor> Offspring { get => offspring; set => offspring = value; }
@@ -89,44 +84,65 @@ namespace PROG201_System_Project.actors.creatures
             }
 
         }
+
         public void IncreaseHappy()
         {
             if (ReadyToMate)
             {
-                if(Happy++ >= MaxHappy)
-                {
-                    Happy = MaxHappy;
-                }
-                else { Happy++; }
+                Increment(Happy, 1, MaxHappy);
             }
         }
 
-        public void CheckHappy()
+        public void IncreaseGestation()
         {
-            if(Happy == MaxHappy) LookForMate = true;
+            if(Gestating)
+            {
+                Increment(Gestation, 1, MaxGestation);
+            }
         }
 
-        public Actor FindNearestBirthPlace(Grid grid, Dictionary<Image, Actor> actors) => FindNearest(BirthPlace, actors);
+        public void CheckHappy() => LookForMate = Happy.Equals(MaxHappy);
+
+        public void CheckGestation() => ReadyToDeliver = Gestation.Equals(MaxGestation);
+
+        public Actor FindNearestBirthPlace(Grid grid, Dictionary<Image, Actor> actors) => FindNearest(BirthPlace, CreateReadOnlyDict(actors, BirthPlace.GetType()));
 
         public Actor FindNearestMate(Grid grid, Dictionary<Image, Actor> actors)
         {
             Type type = GetType();
             switch(Chromesome)
             {
-                case ChromesomeType.X: return FindNearest(this, CreateReadOnlyDict(actors, type, this, a => a.Chromesome == ChromesomeType.X));
-                case ChromesomeType.Y: return FindNearest(this, CreateReadOnlyDict(actors, type, this, a => a.Chromesome == ChromesomeType.Y));
+                case ChromesomeType.X: return FindNearest(this, CreateReadOnlyDict(actors, type, this, a => a.Chromesome == ChromesomeType.Y));
+                case ChromesomeType.Y: return FindNearest(this, CreateReadOnlyDict(actors, type, this, a => a.Chromesome == ChromesomeType.X));
                 default: return null;
             }
         }
 
-        public void Procreate(Actor NearestMate)
+        public void CreateOffspring(int amount)
         {
-            
+            Type t = GetType();
+            for(int i = 0; i < amount; i++)
+            {
+                Offspring.Add(CreateInstance<Actor>(t));
+            }
+        }
+
+        public void Procreate()
+        {
+            if (Chromesome == ChromesomeType.Y) return;
+
+            CreateOffspring(Rand.Next(1, MaxOffspring));
         }
 
         public void GiveBirth(Grid grid, Dictionary<Image, Actor> actors)
         {
-            int b = 5;
+            foreach(Actor offspring in Offspring)
+            {
+                int dist_x = Rand.Next(-BirthRange, BirthRange);
+                int dist_y = Rand.Next(-BirthRange, BirthRange);
+
+                offspring.SpawnGridActor(grid, actors,Grid_X + dist_x, Grid_Y + dist_y);
+            }
         }
         #endregion
 
@@ -365,22 +381,28 @@ namespace PROG201_System_Project.actors.creatures
                 MoveRandom(grid);
             }
 
-            if(Thirsty)
+            if (ReadyToDeliver)
             {
-                NearestWater = FindNearestWater(grid, actors);
+                Actor NearestBirthPlace = FindNearestBirthPlace(grid, actors);
+                MoveThenExcute(NearestBirthPlace, () => GiveBirth(grid, actors), grid);
+            }
+
+            if (LookForMate)
+            {
+                Actor NearestMate = FindNearestMate(grid, actors);
+                MoveThenExcute(NearestMate, () => Procreate(), grid);
+            }
+
+            if (Thirsty)
+            {
+                Water NearestWater = FindNearestWater(grid, actors);
                 MoveThenExcute(NearestWater, () => Drink(NearestWater), grid);
             }
 
             if (Hungery)
             {
-                NearestFood = FindNearestFood(grid, actors);
+                IFood NearestFood = FindNearestFood(grid, actors);
                 MoveThenExcute(NearestFood, () => Eat(NearestFood), grid);
-            }
-
-            if (LookForMate)
-            {
-                NearestMate = FindNearestMate(grid, actors);
-                MoveThenExcute(NearestMate, () => Procreate(NearestMate), grid);
             }
         }
     }
