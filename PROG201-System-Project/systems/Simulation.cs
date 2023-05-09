@@ -67,7 +67,8 @@ namespace PROG201_System_Project.systems
 
         #region Actor Lists
 
-        Actor NewActor = new Actor();
+        Actor ActorAdd = null;
+        Actor ActorSub = null;
 
         public List<Actor> ActiveCreatures = new List<Actor>();
         public List<Actor> ActiveLandscapes = new List<Actor>();
@@ -152,21 +153,37 @@ namespace PROG201_System_Project.systems
             Start();
         }
 
-        #region Actor Add
-        public void FindActor(string content)
+        #region Actor Add / Sub
+        public void FindActorToAdd(string content)
         {
             Type type = ActorCache.Find(a => a.Name == content);
 
-            NewActor = CreateInstance<Actor>(type);
+            ActorAdd = CreateInstance<Actor>(type);
         }
 
         public void AddActor(int y, int x)
         {
-            if(NewActor == null) return;
+            if(ActorAdd == null) return;
 
-            NewActor.SpawnGridActor(Board, Actors, y, x);
+            ActorAdd.SpawnGridActor(Board, Actors, y, x);
 
-            NewActor = null;
+            ActorAdd = null;
+        }
+
+        public void FindActorToSub(string content)
+        {
+            Type type = ActorCache.Find(a => a.Name == content);
+
+            ActorSub = Actors.Values.First(a => ObjectIs(a, type));
+        }
+
+        public void SubActor()
+        {
+            if (ActorSub == null) return;
+
+            ActorSub.DeleteActor(Board, Actors, ActorSub);
+
+            ActorSub = null;
         }
 
         #endregion
@@ -259,6 +276,16 @@ namespace PROG201_System_Project.systems
             SetTimerInterval();
         }
         #endregion
+
+        public void TimerPause()
+        {
+            Timer.Stop();
+        }
+
+        public void TimerPlay()
+        {
+            Timer.Start();
+        }
 
         public void Start()
         {

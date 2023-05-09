@@ -13,6 +13,8 @@
     <None Remove="images\default.BMP" />
     <None Remove="images\hole.BMP" />
     <None Remove="images\moth.BMP" />
+    <None Remove="images\pause.BMP" />
+    <None Remove="images\play.BMP" />
     <None Remove="images\rabbit.BMP" />
     <None Remove="images\tree.BMP" />
     <None Remove="images\water.BMP" />
@@ -23,28 +25,34 @@
     <Content Include="images\arrow.BMP">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="images\bird.BMP">
+    <Content Include="images\pause.BMP">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="images\hole.BMP">
+    <Content Include="images\play.BMP">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="images\tree.BMP">
+    <Content Include="images\sprites\bird.BMP">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="images\rabbit.BMP">
+    <Content Include="images\sprites\hole.BMP">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="images\moth.BMP">
+    <Content Include="images\sprites\tree.BMP">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="images\water.BMP">
+    <Content Include="images\sprites\rabbit.BMP">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="images\default.BMP">
+    <Content Include="images\sprites\moth.BMP">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="images\yucca.BMP">
+    <Content Include="images\sprites\water.BMP">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\sprites\default.BMP">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\sprites\yucca.BMP">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

@@ -47,19 +47,27 @@ namespace PROG201_System_Project.pages
             Sim.IncreaseInterval();
         }
 
+        private void Pause_Click(object sender, RoutedEventArgs e)
+        {
+            Sim.TimerPause();
+        }
+
+        private void Play_Click(object sender, RoutedEventArgs e)
+        {
+            Sim.TimerPlay();
+        }
+
         private void Fast_Click(object sender, RoutedEventArgs e)
         {
             Sim.DecreaseInterval();
         }
 
-        private void Actor_Checked(object sender, RoutedEventArgs e)
+        private void Add_Checked(object sender, RoutedEventArgs e)
         {
             RadioButton button = sender as RadioButton;
-
-            string groupname = (string)button.GroupName;
             string content = (string)button.Content;
 
-            Sim.FindActor(content);
+            Sim.FindActorToAdd(content);
         }
 
         private void Add_Click(object sender, RoutedEventArgs e)
@@ -69,7 +77,25 @@ namespace PROG201_System_Project.pages
 
             Sim.AddActor(x, y);
 
-            MainWindow.UI.UnCheckGridButtons(grd_ActorButtons);
+            MainWindow.UI.UnCheckGridButtons(grd_AddButtons);
+        }
+
+        private void Sub_Checked(object sender, RoutedEventArgs e)
+        {
+            RadioButton button = sender as RadioButton;
+            string content = (string)button.Content;
+
+            Sim.FindActorToSub(content);
+        }
+
+        private void Sub_Click(object sender, RoutedEventArgs e)
+        {
+            int x = Convert.ToInt32(tb_AddX.Text);
+            int y = Convert.ToInt32(tb_AddY.Text);
+
+            Sim.SubActor();
+
+            MainWindow.UI.UnCheckGridButtons(grd_SubButtons);
         }
     }
 }

@@ -274,7 +274,7 @@ namespace PROG201_System_Project.actors.creatures
 
         void CheckEaten()
         {
-            if (Eaten) Alive = false
+            if (Eaten) Alive = false;
         }
 
         void CheckAlive(Grid grid, Dictionary<int, Actor> actors)

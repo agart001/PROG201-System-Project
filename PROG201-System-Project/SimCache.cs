@@ -94,7 +94,7 @@ namespace PROG201_System_Project
 
         public static void LoadImageCache()
         {
-            DirectoryInfo dirinfo = new DirectoryInfo("images");
+            DirectoryInfo dirinfo = new DirectoryInfo("images\\sprites");
             FileInfo[] allfiles = dirinfo.GetFiles();
 
             foreach (FileInfo file in allfiles)

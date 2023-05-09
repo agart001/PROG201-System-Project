@@ -1,8 +1,38 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <actors>
-	<actor type="Moth" x="0" y="0"/>
-	<actor type="Bird" x="0" y="0"/>
-	<actor type="Water" x="35" y="10"/>
-	<actor type="Water" x="25" y="10"/>
 	
+	<actor type="Water" x="0" y="0"/>
+	<actor type="Water" x="40" y="0"/>
+	<actor type="Water" x="0" y="20"/>
+	<actor type="Water" x="40" y="20"/>
+	<actor type="Water" x="10" y="10"/>
+	<actor type="Water" x="30" y="10"/>
+
+	<actor type="Hole" x="5" y="10"/>
+	<actor type="Hole" x="35" y="10"/>
+	<actor type="Hole" x="0" y="0"/>
+
+	<actor type="Yucca" sex="2" x="15" y="10"/>
+	<actor type="Yucca" sex="2" x="25" y="10"/>
+	<actor type="Yucca" sex="1" x="5" y="5"/>
+	<actor type="Yucca" sex="1" x="35" y="15"/>
+	<actor type="Yucca" sex="0" x="0" y="0"/>
+
+	<actor type="Tree" sex="2" x="30" y="15"/>
+	<actor type="Tree" sex="1" x="15" y="5"/>
+	<actor type="Tree" sex="0" x="0" y="0"/>
+	
+	<actor type="Moth" sex="2" x="0" y="0"/>
+	<actor type="Moth" sex="2" x="0" y="0"/>
+	<actor type="Moth" sex="1" x="0" y="0"/>
+	<actor type="Moth" sex="1" x="0" y="0"/>
+	<actor type="Moth" sex="0" x="0" y="0"/>
+	
+	<actor type="Bird" sex="2" x="0" y="0"/>
+	<actor type="Bird" sex="1" x="0" y="0"/>
+	<actor type="Bird" sex="0" x="0" y="0"/>
+
+	<actor type="Rabbit" sex="1" x="0" y="0"/>
+	<actor type="Rabbit" sex="2" x="0" y="0"/>
+	<actor type="Rabbit" sex="0" x="0" y="0"/>
 </actors>

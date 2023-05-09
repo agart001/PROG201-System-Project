@@ -21,171 +21,189 @@
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Column="1" Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="1*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="2*"/>
-            </Grid.RowDefinitions>
-
-            <Label Grid.Column="0" Grid.Row="0" Margin="5,5,5,5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Time" FontSize="15" Background="White" />
-            <Label Grid.Column="2" Grid.Row="0" Margin="5,5,5,5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Season" FontSize="15" Background="White" />
-
-
-            <Grid Grid.Column="0" Grid.Row="1">
+        <Border Grid.Column="1" Grid.Row="0" BorderBrush="White" BorderThickness="4">
+            <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height=".75*"/>
+                    <RowDefinition Height="2*"/>
                 </Grid.RowDefinitions>
 
-                <Label Grid.Column="0" Grid.Row="0" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Hour" FontSize="15" Background="White" />
-                <Label Grid.Column="1" Grid.Row="0" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Day" FontSize="15" Background="White" />
-                <Label Grid.Column="2" Grid.Row="0" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Month" FontSize="15" Background="White" />
+                <Label Grid.Column="0" Grid.Row="0" Margin="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Time" FontSize="15" Background="White" />
+                <Border Grid.Column="0" Grid.Row="1" BorderBrush="Black" BorderThickness="2">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
 
-                <TextBlock Grid.Column="0" Grid.Row="1" Margin="2,2,2,2" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Path=Hour, UpdateSourceTrigger=PropertyChanged}" Background="Wheat"/>
-                <TextBlock Grid.Column="1" Grid.Row="1" Margin="2,2,2,2" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Path=Day, UpdateSourceTrigger=PropertyChanged}" Background="Wheat"/>
-                <TextBlock Grid.Column="2" Grid.Row="1" Margin="2,2,2,2" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Path=Month, UpdateSourceTrigger=PropertyChanged}" Background="Wheat"/>
+                        <Label Grid.Column="0" Grid.Row="0" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Hour" FontSize="15" Background="White" />
+                        <Label Grid.Column="1" Grid.Row="0" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Day" FontSize="15" Background="White" />
+                        <Label Grid.Column="2" Grid.Row="0" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Month" FontSize="15" Background="White" />
 
-            </Grid>
+                        <TextBlock Grid.Column="0" Grid.Row="1" Margin="2,2,2,2" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Path=Hour, UpdateSourceTrigger=PropertyChanged}" Background="Wheat"/>
+                        <TextBlock Grid.Column="1" Grid.Row="1" Margin="2,2,2,2" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Path=Day, UpdateSourceTrigger=PropertyChanged}" Background="Wheat"/>
+                        <TextBlock Grid.Column="2" Grid.Row="1" Margin="2,2,2,2" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Path=Month, UpdateSourceTrigger=PropertyChanged}" Background="Wheat"/>
 
-            <Grid Grid.Column="2" Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
-                </Grid.RowDefinitions>
+                    </Grid>
+                </Border>
 
-                <Label Grid.Column="0" Grid.Row="0" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Season" FontSize="15" Background="White" />
-                <Label Grid.Column="1" Grid.Row="0" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Weather" FontSize="15" Background="White" />
-                <Label Grid.Column="2" Grid.Row="0" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Perciptation" FontSize="10" Background="White" />
+                <Label Grid.Column="1" Grid.Row="0" Margin="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Controls" FontSize="15" Background="White" />
+                <Border Grid.Column="1" Grid.Row="1" BorderBrush="Black" BorderThickness="2">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
 
-                <TextBlock Grid.Column="0" Grid.Row="1" Margin="2,2,2,2" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Path=CurrentSeason, UpdateSourceTrigger=PropertyChanged}" Background="Wheat"/>
-                <TextBlock Grid.Column="1" Grid.Row="1" Margin="2,2,2,2" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Path=WeatherType, UpdateSourceTrigger=PropertyChanged}" Background="Wheat"/>
-                <TextBlock Grid.Column="2" Grid.Row="1" Margin="2,2,2,2" TextAlignment="Center" VerticalAlignment="Center" Text="{}" Background="Wheat"/>
+                        <Label Grid.Column="0" Grid.Row="0" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Slow" FontSize="15" Background="White" />
+                        <Button Grid.Column="0" Grid.Row="1" Margin="2,2,2,2" Click="Slow_Click">
+                            <Image Stretch="Fill">
+                                <Image.Source>
+                                    <TransformedBitmap Source="/images/arrow.BMP">
+                                        <TransformedBitmap.Transform>
+                                            <RotateTransform Angle="180"/>
+                                        </TransformedBitmap.Transform>
+                                    </TransformedBitmap>
+                                </Image.Source>
+                            </Image>
+                        </Button>
 
-            </Grid>
+                        <Label Grid.Column="1" Grid.Row="0" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Pause" FontSize="15" Background="White" />
+                        <Button Grid.Column="1" Grid.Row="1" Margin="2,2,2,2" Click="Pause_Click">
+                            <Image Stretch="Fill" Source="/images/pause.BMP"/>
+                        </Button>
 
-        </Grid>
+                        <Label Grid.Column="2" Grid.Row="0" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Play" FontSize="15" Background="White" />
+                        <Button Grid.Column="2" Grid.Row="1" Margin="2,2,2,2" Click="Play_Click">
+                            <Image Stretch="Fill" Source="/images/play.BMP"/>
+                        </Button>
 
-        <Grid Grid.Column="0" Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="1.5*"/>
-                <RowDefinition Height="3.5*"/>
-            </Grid.RowDefinitions>
+                        <Label Grid.Column="3" Grid.Row="0" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Fast" FontSize="15" Background="White" />
+                        <Button Grid.Column="3" Grid.Row="1" Margin="2,2,2,2" Click="Fast_Click">
+                            <Image Stretch="Fill" Source="/images/arrow.BMP"/>
+                        </Button>
+                    </Grid>
+                </Border>
 
-            <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height=".5*"/>
-                    <RowDefinition Height=".5*"/>
-                </Grid.RowDefinitions>
-
-                <Label Grid.Column="0" Grid.Row="0" Margin="5,5,5,5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Slow" FontSize="15" Background="White" />
-                <Label Grid.Column="1" Grid.Row="0" Margin="5,5,5,5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Fast" FontSize="15" Background="White" />
-
-                <Button Grid.Column="0" Grid.Row="1" Margin="5,5,5,5" Click="Slow_Click">
-                    <Image Stretch="Fill">
-                        <Image.Source>
-                            <TransformedBitmap Source="/images/arrow.BMP">
-                                <TransformedBitmap.Transform>
-                                    <RotateTransform Angle="180"/>
-                                </TransformedBitmap.Transform>
-                            </TransformedBitmap>
-                        </Image.Source>
-                    </Image>
-                </Button>
-                <Button Grid.Column="1" Grid.Row="1" Margin="5,5,5,5" Click="Fast_Click">
-                    <Image Stretch="Fill" Source="/images/arrow.BMP"/>
-                </Button>
-            </Grid>
-
-            <Grid Grid.Row="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height=".5*"/>
-                    <RowDefinition Height="3.5*"/>
-                    <RowDefinition Height="1*"/>
-                </Grid.RowDefinitions>
-
-                <Label Grid.Row="0" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Add Actors" Background="White"/>
-
-                <Grid x:Name="grd_ActorButtons" Grid.Row="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width=".75*"/>
-                        <ColumnDefinition Width=".5*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                    </Grid.RowDefinitions>
-                    <RadioButton Grid.Column="0" Grid.Row="0" Margin="5,5,5,5" Content="Water" GroupName="Landscape" Checked="Actor_Checked"/>
-                    <RadioButton Grid.Column="0" Grid.Row="1" Margin="5,5,5,5" Content="Water" GroupName="Landscape" Checked="Actor_Checked"/>
-                    <RadioButton Grid.Column="0" Grid.Row="2" Margin="5,5,5,5" Content="Water" GroupName="Landscape" Checked="Actor_Checked"/>
-                    <RadioButton Grid.Column="0" Grid.Row="3" Margin="5,5,5,5" Content="Water" GroupName="Landscape" Checked="Actor_Checked"/>
-                    <RadioButton Grid.Column="0" Grid.Row="4" Margin="5,5,5,5" Content="Water" GroupName="Landscape" Checked="Actor_Checked"/>
-                    <RadioButton Grid.Column="0" Grid.Row="5" Margin="5,5,5,5" Content="Water" GroupName="Landscape" Checked="Actor_Checked"/>
-
-                    <Image Grid.Column="1" Grid.Row="0" Margin="5" Source="/images/water.BMP"/>
-                    <Image Grid.Column="1" Grid.Row="1" Margin="5" Source="/images/water.BMP"/>
-                    <Image Grid.Column="1" Grid.Row="2" Margin="5" Source="/images/water.BMP"/>
-                    <Image Grid.Column="1" Grid.Row="3" Margin="5" Source="/images/water.BMP"/>
-                    <Image Grid.Column="1" Grid.Row="4" Margin="5" Source="/images/water.BMP"/>
-                    <Image Grid.Column="1" Grid.Row="5" Margin="5" Source="/images/water.BMP"/>
-                </Grid>
-
-                <Grid Grid.Row="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="1*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <Button Grid.Column="0" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="+" Click="Add_Click"/>
-
-                    <Grid Grid.Column="1">
+                <Label Grid.Column="2" Grid.Row="0" Margin="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Season" FontSize="15" Background="White" />
+                <Border Grid.Column="2" Grid.Row="1" BorderBrush="Black" BorderThickness="2">
+                    <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1*"/>
                             <ColumnDefinition Width="1*"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height=".5*"/>
+                            <RowDefinition Height="1*"/>
                             <RowDefinition Height="1*"/>
                         </Grid.RowDefinitions>
 
-                        <Label Grid.Column="0" Grid.Row="0" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="X" Background="White"/>
-                        <Label Grid.Column="1" Grid.Row="0" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Y" Background="White"/>
+                        <Label Grid.Column="0" Grid.Row="0" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Season" FontSize="15" Background="White" />
+                        <Label Grid.Column="1" Grid.Row="0" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Weather" FontSize="15" Background="White" />
 
-                        <TextBox x:Name="tb_AddX" Grid.Column="0" Grid.Row="1" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Text="0" Background="Wheat"/>
-                        <TextBox x:Name="tb_AddY" Grid.Column="1" Grid.Row="1" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Text="0" Background="Wheat"/>
-
-
+                        <TextBlock Grid.Column="0" Grid.Row="1" Margin="2,2,2,2" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Path=CurrentSeason, UpdateSourceTrigger=PropertyChanged}" Background="Wheat"/>
+                        <TextBlock Grid.Column="1" Grid.Row="1" Margin="2,2,2,2" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Path=WeatherType, UpdateSourceTrigger=PropertyChanged}" Background="Wheat"/>
                     </Grid>
+                </Border>
+
+            </Grid>
+        </Border>
+
+        <Border Grid.Column="0" Grid.Row="1" BorderBrush="White" BorderThickness="4">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height=".5*"/>
+                        <RowDefinition Height="3.5*"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Row="0" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Add Actors" Background="White"/>
+                    <Border Grid.Row="1" BorderBrush="Black" BorderThickness="2">
+                        <Grid x:Name="grd_AddButtons">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width=".75*"/>
+                                <ColumnDefinition Width=".5*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+                            
+                            <RadioButton Grid.Column="0" Grid.Row="0" Margin="5,5,5,5" Content="Water" Checked="Add_Checked"/>
+                            <RadioButton Grid.Column="0" Grid.Row="1" Margin="5,5,5,5" Content="Hole" Checked="Add_Checked"/>
+                            <RadioButton Grid.Column="0" Grid.Row="2" Margin="5,5,5,5" Content="Tree" Checked="Add_Checked"/>
+                            <RadioButton Grid.Column="0" Grid.Row="3" Margin="5,5,5,5" Content="Yucca" Checked="Add_Checked"/>
+                            <RadioButton Grid.Column="0" Grid.Row="4" Margin="5,5,5,5" Content="Moth" Checked="Add_Checked"/>
+                            <RadioButton Grid.Column="0" Grid.Row="5" Margin="5,5,5,5" Content="Bird" Checked="Add_Checked"/>
+                            <RadioButton Grid.Column="0" Grid.Row="6" Margin="5,5,5,5" Content="Rabbit" Checked="Add_Checked"/>
+
+                            <Image Grid.Column="1" Grid.Row="0" Margin="5" Source="/images/sprites/water.BMP"/>
+                            <Image Grid.Column="1" Grid.Row="1" Margin="5" Source="/images/sprites/hole.BMP"/>
+                            <Image Grid.Column="1" Grid.Row="2" Margin="5" Source="/images/sprites/tree.BMP"/>
+                            <Image Grid.Column="1" Grid.Row="3" Margin="5" Source="/images/sprites/yucca.BMP"/>
+                            <Image Grid.Column="1" Grid.Row="4" Margin="5" Source="/images/sprites/moth.BMP"/>
+                            <Image Grid.Column="1" Grid.Row="5" Margin="5" Source="/images/sprites/bird.BMP"/>
+                            <Image Grid.Column="1" Grid.Row="6" Margin="5" Source="/images/sprites/rabbit.BMP"/>
+                        </Grid>
+                    </Border>
+
+                    <Border Grid.Row="2" BorderBrush="Black" BorderThickness="2">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Button Grid.Column="0" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="+" Click="Add_Click" FontSize="30"/>
+
+                            <Grid Grid.Column="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height=".5*"/>
+                                    <RowDefinition Height="1*"/>
+                                </Grid.RowDefinitions>
+
+                                <Label Grid.Column="0" Grid.Row="0" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="X" Background="White"/>
+                                <Label Grid.Column="1" Grid.Row="0" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Y" Background="White"/>
+
+                                <TextBox x:Name="tb_AddX" Grid.Column="0" Grid.Row="1" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Text="0" Background="Wheat"/>
+                                <TextBox x:Name="tb_AddY" Grid.Column="1" Grid.Row="1" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Text="0" Background="Wheat"/>
+                            </Grid>
+                        </Grid>
+                    </Border>
                 </Grid>
             </Grid>
-        </Grid>
+        </Border>
 
-        <Border Grid.Column="1" Grid.Row="1" BorderBrush="Black" BorderThickness="5">
+        <Border Grid.Column="1" Grid.Row="1" BorderBrush="Black" BorderThickness="4">
             <Grid x:Name="grd_Board" ShowGridLines="True">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>
@@ -256,50 +274,116 @@
                     <RowDefinition Height="1*"/>
                     <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
-
             </Grid>
         </Border>
 
-        <Grid Grid.Column="1"  Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height=".25*"/>
-                <RowDefinition Height="1*"/>
-            </Grid.RowDefinitions>
+        <Border Grid.Column="2" Grid.Row="1" BorderBrush="White" BorderThickness="4">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
 
-            <Label Grid.Column="0" Grid.Row="0" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Creature Populations" Background="White"/>
-            <Label Grid.Column="1" Grid.Row="0" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Landscape Features" Background="White"/>
-            <Label Grid.Column="2" Grid.Row="0" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Plant Populations" Background="White"/>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height=".5*"/>
+                        <RowDefinition Height="3.5*"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
 
-            <DataGrid Grid.Column="0" Grid.Row="1" Margin="2" ItemsSource="{Binding CreatureCounts, UpdateSourceTrigger=PropertyChanged}"
+                    <Label Grid.Row="0" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Sub Actors" Background="White"/>
+                    <Border Grid.Row="1" BorderBrush="Black" BorderThickness="2">
+                        <Grid x:Name="grd_SubButtons">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width=".75*"/>
+                                <ColumnDefinition Width=".5*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+
+                            <RadioButton Grid.Column="0" Grid.Row="0" Margin="5,5,5,5" Content="Water" Checked="Sub_Checked"/>
+                            <RadioButton Grid.Column="0" Grid.Row="1" Margin="5,5,5,5" Content="Hole" Checked="Sub_Checked"/>
+                            <RadioButton Grid.Column="0" Grid.Row="2" Margin="5,5,5,5" Content="Tree" Checked="Sub_Checked"/>
+                            <RadioButton Grid.Column="0" Grid.Row="3" Margin="5,5,5,5" Content="Yucca" Checked="Sub_Checked"/>
+                            <RadioButton Grid.Column="0" Grid.Row="4" Margin="5,5,5,5" Content="Moth" Checked="Sub_Checked"/>
+                            <RadioButton Grid.Column="0" Grid.Row="5" Margin="5,5,5,5" Content="Bird" Checked="Sub_Checked"/>
+                            <RadioButton Grid.Column="0" Grid.Row="6" Margin="5,5,5,5" Content="Rabbit" Checked="Sub_Checked"/>
+
+                            <Image Grid.Column="1" Grid.Row="0" Margin="5" Source="/images/sprites/water.BMP"/>
+                            <Image Grid.Column="1" Grid.Row="1" Margin="5" Source="/images/sprites/hole.BMP"/>
+                            <Image Grid.Column="1" Grid.Row="2" Margin="5" Source="/images/sprites/tree.BMP"/>
+                            <Image Grid.Column="1" Grid.Row="3" Margin="5" Source="/images/sprites/yucca.BMP"/>
+                            <Image Grid.Column="1" Grid.Row="4" Margin="5" Source="/images/sprites/moth.BMP"/>
+                            <Image Grid.Column="1" Grid.Row="5" Margin="5" Source="/images/sprites/bird.BMP"/>
+                            <Image Grid.Column="1" Grid.Row="6" Margin="5" Source="/images/sprites/rabbit.BMP"/>
+                        </Grid>
+                    </Border>
+
+                    <Border Grid.Row="2" BorderBrush="Black" BorderThickness="2">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Button Grid.Column="0" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="-" Click="Sub_Click" FontSize="30"/>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <Border Grid.Column="1"  Grid.Row="2" BorderBrush="White" BorderThickness="4">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height=".35*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+
+                <Label Grid.Column="0" Grid.Row="0" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Creature Populations" Background="White"/>
+                <Label Grid.Column="1" Grid.Row="0" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Landscape Features" Background="White"/>
+                <Label Grid.Column="2" Grid.Row="0" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Plant Populations" Background="White"/>
+
+                <Border Grid.Column="0" Grid.Row="1" BorderBrush="Black" BorderThickness="2">
+                    <DataGrid ItemsSource="{Binding CreatureCounts, UpdateSourceTrigger=PropertyChanged}"
                           ColumnWidth=".5*" SelectionUnit="FullRow" AutoGenerateColumns="False">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Type" Binding="{Binding Key, Converter={StaticResource ObjectString}}"/>
-                    <DataGridTextColumn Header="Count" Binding="{Binding Value, UpdateSourceTrigger=PropertyChanged}"/>
-                </DataGrid.Columns>
-            </DataGrid>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Type" Binding="{Binding Key, Converter={StaticResource ObjectString}}"/>
+                            <DataGridTextColumn Header="Count" Binding="{Binding Value, UpdateSourceTrigger=PropertyChanged}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Border>
 
-            <DataGrid Grid.Column="1" Grid.Row="1" Margin="2" ItemsSource="{Binding LandscapeCounts, UpdateSourceTrigger=PropertyChanged}"
+                <Border Grid.Column="1" Grid.Row="1" BorderBrush="Black" BorderThickness="2">
+                    <DataGrid ItemsSource="{Binding LandscapeCounts, UpdateSourceTrigger=PropertyChanged}"
                           ColumnWidth=".5*" SelectionUnit="FullRow" AutoGenerateColumns="False">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Type" Binding="{Binding Key, Converter={StaticResource ObjectString}}"/>
-                    <DataGridTextColumn Header="Count" Binding="{Binding Value, UpdateSourceTrigger=PropertyChanged}"/>
-                </DataGrid.Columns>
-            </DataGrid>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Type" Binding="{Binding Key, Converter={StaticResource ObjectString}}"/>
+                            <DataGridTextColumn Header="Count" Binding="{Binding Value, UpdateSourceTrigger=PropertyChanged}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Border>
 
-            <DataGrid Grid.Column="2" Grid.Row="1" Margin="2" ItemsSource="{Binding PlantCounts, UpdateSourceTrigger=PropertyChanged}"
+                <Border Grid.Column="2" Grid.Row="1" BorderBrush="Black" BorderThickness="2">
+                    <DataGrid ItemsSource="{Binding PlantCounts, UpdateSourceTrigger=PropertyChanged}"
                           ColumnWidth=".5*" SelectionUnit="FullRow" AutoGenerateColumns="False">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Type" Binding="{Binding Key, Converter={StaticResource ObjectString}}"/>
-                    <DataGridTextColumn Header="Count" Binding="{Binding Value, UpdateSourceTrigger=PropertyChanged}"/>
-                </DataGrid.Columns>
-            </DataGrid>
-
-        </Grid>
-
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Type" Binding="{Binding Key, Converter={StaticResource ObjectString}}"/>
+                            <DataGridTextColumn Header="Count" Binding="{Binding Value, UpdateSourceTrigger=PropertyChanged}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Border>
+            </Grid>
+        </Border>
     </Grid>
 </Page>

@@ -15,23 +15,23 @@ using static PROG201_System_Project.Utility;
 
 namespace PROG201_System_Project.actors.creatures
 {
-    public class Bird : Creature
+    public class Rabbit : Creature
     {
         public override void PreContruct()
         {
             GetRandomID();
 
-            ImageFile = "bird.BMP";
+            ImageFile = "rabbit.BMP";
         }
 
         public override void PostContruct()
         {
             #region Creature
-            Vore = VoreType.Carnivore;
+            Vore = VoreType.Herbivore;
 
             Alive = true;
 
-            MaxMovement = 6;
+            MaxMovement = 4;
 
             MaxHealth = 15;
             Health = 15;
@@ -45,7 +45,7 @@ namespace PROG201_System_Project.actors.creatures
             MaxHunger = 20;
             Hunger = 20;
             HungerMR = .2;
-            PreferredFood = typeof(Moth);
+            PreferredFood = typeof(Yucca);
             #endregion
 
             #region IFood
@@ -69,12 +69,12 @@ namespace PROG201_System_Project.actors.creatures
             MaxHappy = 10;
             Happy = 0;
 
-            MatingSeason = "Fall";
-            BirthPlace = typeof(Tree);
+            MatingSeason = "Summer";
+            BirthPlace = typeof(Hole);
             BirthRange = 5;
             #endregion
 
-            Hungery = true;
+            //Thirsty = true;
         }
 
 

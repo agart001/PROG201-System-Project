@@ -13,19 +13,19 @@ using System.Windows;
 
 namespace PROG201_System_Project.actors.plants
 {
-    public class Yucca : Plant
+    public class Tree : Plant
     {
         public override void PreContruct()
         {
             GetRandomID();
 
-            ImageFile = "yucca.BMP";
+            ImageFile = "tree.BMP";
         }
 
         public override void PostContruct()
         {
             Polinators = new List<Actor>();
-            PreferredPolinator = typeof(Moth);
+            PreferredPolinator = typeof(Bird);
 
             DailySun = 5;
             SunRecieved = 5;
@@ -35,14 +35,15 @@ namespace PROG201_System_Project.actors.plants
 
             Growing = true;
 
-            FlowerSeason = "Spring";
-            FruitSeason = "Summer";
+            FlowerSeason = "Fall";
+            FruitSeason = "Spring";
 
             Fruiting = true;
 
-            MaxFruitAmount = 10;
-            FruitAmount = 5;
+            MaxFruitAmount = 4;
+            FruitAmount = 2;
 
+            
             #region IProcreate
             Chromesome = (IProcreate.ChromesomeType)Rand.Next(0, 1);
 
@@ -61,6 +62,7 @@ namespace PROG201_System_Project.actors.plants
 
             BirthRange = 5;
             #endregion
+            
         }
     }
 }

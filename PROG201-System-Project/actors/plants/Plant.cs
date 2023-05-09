@@ -19,7 +19,7 @@ namespace PROG201_System_Project.actors.plants
         #endregion
 
         public List<Actor> Polinators { get; set; }
-        public Actor PreferredPolinator { get; set; }
+        public Type PreferredPolinator { get; set; }
 
         public int DailySun{ get; set; }
         public int SunRecieved { get; set; }
@@ -170,7 +170,8 @@ namespace PROG201_System_Project.actors.plants
 
         void GrowNewFruit()
         {
-            FruitAmount = Rand.Next(FruitAmount + 1, MaxFruitAmount);
+            if (FruitAmount == MaxFruitAmount) return;
+            FruitAmount = Rand.Next(FruitAmount, MaxFruitAmount);
         }
 
         public void GrowFruit()
@@ -210,7 +211,7 @@ namespace PROG201_System_Project.actors.plants
         
         void AttachPollen(Grid grid, Dictionary<int, Actor> actors)
         {
-            List<Actor> preferred = ValueList(actors).Where(a => ObjectIs(a, PreferredPolinator.GetType())).ToList();
+            List<Actor> preferred = ValueList(actors).Where(a => ObjectIs(a, PreferredPolinator)).ToList();
 
             foreach(Actor actor in preferred)
             {

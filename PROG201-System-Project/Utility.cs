@@ -92,6 +92,19 @@ namespace PROG201_System_Project
 
                 if (Actor == null) return;
 
+                if (ObjectIs<IProcreate>(Actor))
+                {
+                    IProcreate cast = (IProcreate)Actor;
+                    int sex = Convert.ToInt32(actor.GetAttribute("sex"));
+
+                    switch(sex)
+                    {
+                        case 1: cast.Chromesome = IProcreate.ChromesomeType.Y; break;
+                        case 2: cast.Chromesome = IProcreate.ChromesomeType.X; break;
+                        default: break;
+                    }
+                }
+
                 int spawn_x = Convert.ToInt32(actor.GetAttribute("x"));
                 int spawn_y = Convert.ToInt32(actor.GetAttribute("y"));
 
