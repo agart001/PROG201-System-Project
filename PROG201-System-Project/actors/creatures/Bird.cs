@@ -14,37 +14,37 @@ using static PROG201_System_Project.Utility;
 
 namespace PROG201_System_Project.actors.creatures
 {
-    public class Moth : Creature
+    public class Bird : Creature
     {
         public override void PreContruct()
         {
             GetRandomID();
 
-            ImageFile = "moth.BMP";
+            ImageFile = "bird.BMP";
         }
 
         public override void PostContruct()
         {
             #region Creature
-            Vore = VoreType.Herbivore;
+            Vore = VoreType.Carnivore;
 
             Alive = true;
 
-            MaxMovement = 3;
+            MaxMovement = 5;
 
             MaxHealth = 15;
             Health = 15;
             AttackDamage = 2;
 
             MaxHydration = 20;
-            Hydration = 20;
+            Hydration = 15;
             HydrationMR = .2;
             WaterIntake = 5;
 
             MaxHunger = 20;
             Hunger = 20;
             HungerMR = .2;
-            PreferredFood = typeof(Yucca);
+            PreferredFood = typeof(Moth);
             #endregion
 
             #region IFood
@@ -73,7 +73,7 @@ namespace PROG201_System_Project.actors.creatures
             BirthRange = 5;
             #endregion
 
-            //Thirsty = true;
+            Hungery = true;
         }
 
 

@@ -16,20 +16,19 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using static PROG201_System_Project.Utility;
+using static PROG201_System_Project.SimCache;
 
 namespace PROG201_System_Project
 {
     public class Actor
     {
-        public int TypeID { get; set; }
-        public int ActorID { get; set; }
+        private Image? sprite; public Image? Sprite { get => sprite; set => sprite = value; }
 
-        public Image Sprite = new Image();
+        private string? imgfile; public string? ImageFile { get => imgfile; set => imgfile = value; }
+        private int actorid; public int ActorID { get => actorid; set => actorid = value; }
 
-        public string ImageFile = "default.BMP";
-
-        public int Grid_Y { get; set; }
-        public int Grid_X { get; set; }
+        private int y; public int Grid_Y { get => y; set => y = value; }
+        private int x; public int Grid_X { get => x; set => x = value; }
 
 
         public virtual void ParentPreConstruct()
@@ -53,7 +52,16 @@ namespace PROG201_System_Project
 
             PreContruct();
 
-            Sprite.Source = ImageFromString(ImageFile);
+            Type t = GetType();
+
+            if (ImageFile != null)
+            {
+                Image clone = new Image();
+                clone.Source = ImageCache[ImageFile].Source;
+
+                Sprite = clone;
+            }
+            else { Sprite = null; }
 
             PostContruct();
         }
@@ -67,7 +75,7 @@ namespace PROG201_System_Project
         {
 
         }
-        public virtual void TickAction(Grid grid, Dictionary<Image, Actor> actors)
+        public virtual void TickAction(Grid grid, Dictionary<int, Actor> actors)
         {
 
         }
@@ -75,12 +83,17 @@ namespace PROG201_System_Project
 
         public virtual void SpriteOpacity() { }
 
-        public Actor Clone() => (Actor)this.MemberwiseClone();
+        public Actor Clone() => (Actor)MemberwiseClone();
 
-        public void DeleteActor(Grid grid, Dictionary<Image, Actor> actors, Actor actor)
+        public void GetRandomID()
+        {
+            ActorID = Rand.Next(1,1000000);
+        }
+
+        public void DeleteActor(Grid grid, Dictionary<int, Actor> actors, Actor actor)
         {
             grid.Children.Remove(Sprite);
-            actors.Remove(Sprite, out actor);
+            actors.Remove(ActorID, out actor);
         }
 
         #region Position
@@ -90,13 +103,13 @@ namespace PROG201_System_Project
             Grid_X = Grid.GetColumn(this.Sprite);
         }
 
-        public void SpawnGridActor(Grid grid, Dictionary<Image, Actor> actors, int spawn_y, int spawn_x)
+        public void SpawnGridActor(Grid grid, Dictionary<int, Actor> actors, int spawn_y, int spawn_x)
         {
-            Grid.SetRow(this.Sprite, spawn_y);
-            Grid.SetColumn(this.Sprite, spawn_x);
+            Grid.SetRow(Sprite, spawn_y);
+            Grid.SetColumn(Sprite, spawn_x);
 
-            actors.Add(this.Sprite, this);
-            grid.Children.Add(this.Sprite);
+            actors.Add(ActorID, this);
+            grid.Children.Add(Sprite);
 
             GetCurrentPosition();
         }
@@ -109,30 +122,26 @@ namespace PROG201_System_Project
             return vector;
         }
 
-        public T FindNearest<T, K, V>(T search_object, IReadOnlyDictionary<K, V> read_actors)
+        public Actor FindNearest(IReadOnlyDictionary<int, Actor> read_actors)
         {
-            Type search_type = search_object.GetType();
-            Actor search_actor = (Actor)Cast(typeof(Actor), search_object);
+            List<Actor> values = ValueList((Dictionary<int, Actor>)read_actors);
 
-            List<K> keys = KeyList((Dictionary<K, V>)read_actors);
+            if (values.Count <= 0) return null;
 
-            if (keys.Count <= 0) return default;
-
-            int[] distances = new int[keys.Count];
+            int[] distances = new int[values.Count];
             int index = 0;
-            foreach (K key in keys)
+            foreach (Actor actor in values)
             {
-                T instance = (T)Cast(typeof(T), read_actors[key]);
-                distances[index] = Math.Abs((int)DistanceToActor(instance as Actor).Length());
+                distances[index] = Math.Abs((int)DistanceToActor(actor).Length());
                 index++;
             }
 
-            int smallestdist = distances.Min();
-            int smallestindex = distances.ToList().FindIndex(i => i == smallestdist);
-            K smallestkey = keys[smallestindex];
+            int nearestdist = distances.Min();
+            int nearestindex = distances.ToList().FindIndex(i => i == nearestdist);
+            Actor nearest = values[nearestindex];
 
 
-            return (T)Cast(typeof(T), read_actors[smallestkey]);
+            return nearest;
         }
         #endregion
 

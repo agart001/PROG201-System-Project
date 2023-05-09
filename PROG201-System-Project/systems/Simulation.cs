@@ -14,6 +14,7 @@ using PROG201_System_Project.actors.landscapes;
 using PROG201_System_Project.actors.plants;
 using PROG201_System_Project.interfaces;
 using static PROG201_System_Project.Utility;
+using static PROG201_System_Project.SimCache;
 
 
 namespace PROG201_System_Project.systems
@@ -22,7 +23,7 @@ namespace PROG201_System_Project.systems
     {
         public Grid Board { get; set; }
 
-        public Dictionary<Image, Actor> Actors = new Dictionary<Image, Actor>();
+        public Dictionary<int, Actor> Actors = new Dictionary<int, Actor>();
 
         public DispatcherTimer Timer { get; set; }
         public TimeSpan DefaultInterval { get; set; }
@@ -39,10 +40,6 @@ namespace PROG201_System_Project.systems
 
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
-            if(name == "LandscapeCounts")
-            {
-                int b = 5;
-            }
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
         #endregion
@@ -72,33 +69,16 @@ namespace PROG201_System_Project.systems
 
         Actor NewActor = new Actor();
 
-        public List<Creature> ActiveCreatures = new List<Creature>();
-        public List<Landscape> ActiveLandscapes = new List<Landscape>();
-        public List<Plant> ActivePlants = new List<Plant>();
+        public List<Actor> ActiveCreatures = new List<Actor>();
+        public List<Actor> ActiveLandscapes = new List<Actor>();
+        public List<Actor> ActivePlants = new List<Actor>();
 
-        List<Creature> GetActiveCreatures()
-        {
-            List<Actor> list = Actors.Values.Where(a => a.IsType(typeof(Creature))).ToList();
-            List<Creature> converted_list = list.ConvertAll(c => (Creature)c);
+        List<Actor> GetActiveCreatures() => Actors.Values.Where(a => a.IsType(typeof(Creature))).ToList();
 
-            return converted_list;
-        }
 
-        List<Landscape> GetActiveLandscapes()
-        {
-            List<Actor> list = Actors.Values.Where(a => a.IsType(typeof(Landscape))).ToList();
-            List<Landscape> converted_list = list.ConvertAll(l => (Landscape)l);
+        List<Actor> GetActiveLandscapes() => Actors.Values.Where(a => a.IsType(typeof(Landscape))).ToList();
 
-            return converted_list;
-        }
-
-        List<Plant> GetActivePlants()
-        {
-            List<Actor> list = Actors.Values.Where(a => a.IsType(typeof(Plant))).ToList();
-            List<Plant> converted_list = list.ConvertAll(p => (Plant)p);
-
-            return converted_list;
-        }
+        List<Actor> GetActivePlants() => Actors.Values.Where(a => a.IsType(typeof(Plant))).ToList();
 
         void GetActorLists()
         {
@@ -108,104 +88,26 @@ namespace PROG201_System_Project.systems
         }
         #endregion
 
-        #region Actor Types
-
-        List<Actor> ActorTypes = new List<Actor>();
-
-        List<Creature> CreatureTypes = new List<Creature>();
-        List<Landscape> LandscapeTypes = new List<Landscape>();
-        List<Plant> PlantTypes = new List<Plant>();
-
-        List<Actor> GetActorTypes()
-        {
-            //Sourec: https://stackoverflow.com/questions/5411694/get-all-inherited-classes-of-an-abstract-class
-            List<Actor> actors = new List<Actor>();
-            foreach (Type type in
-                Assembly.GetAssembly(typeof(Actor)).GetTypes()
-                .Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(Actor))))
-            {
-                actors.Add((Actor)Activator.CreateInstance(type));
-            }
-            //
-
-
-            actors = actors.FindAll(a =>
-            a.GetType().Name == "Creature" ||
-            a.GetType().Name == "Landscape" ||
-            a.GetType().Name == "Plant").ToList();
-
-
-            return actors;
-        }
-        List<Creature> GetCreatureTypes()
-        {
-            List<Creature> types = new List<Creature>();
-            foreach (Type type in
-                Assembly.GetAssembly(typeof(Creature)).GetTypes()
-                .Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(Creature))))
-            {
-                types.Add((Creature)Activator.CreateInstance(type));
-            }
-
-            return types;
-        }
-        List<Landscape> GetLandscapeTypes()
-        {
-            List<Landscape> types = new List<Landscape>();
-            foreach (Type type in
-                Assembly.GetAssembly(typeof(Landscape)).GetTypes()
-                .Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(Landscape))))
-            {
-                types.Add((Landscape)Activator.CreateInstance(type));
-            }
-
-            return types;
-        }
-        List<Plant> GetPlantTypes()
-        {
-            List<Plant> types = new List<Plant>();
-            foreach (Type type in
-                Assembly.GetAssembly(typeof(Plant)).GetTypes()
-                .Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(Plant))))
-            {
-                types.Add((Plant)Activator.CreateInstance(type));
-            }
-
-            return types;
-        }
-
-        void GetAllTypes()
-        {
-            ActorTypes = GetActorTypes();
-
-            CreatureTypes = GetCreatureTypes();
-            LandscapeTypes = GetLandscapeTypes();
-            PlantTypes = GetPlantTypes();
-        }
-        #endregion
-
         #region Actor Counts
 
-        private Dictionary<Creature, int> creaturecounts;
-        private Dictionary<Landscape, int> landscapecounts;
-        private Dictionary<Plant, int> plantcounts;
+        private Dictionary<Type, int> creaturecounts;
+        private Dictionary<Type, int> landscapecounts;
+        private Dictionary<Type, int> plantcounts;
 
-        public Dictionary<Creature, int> CreatureCounts { get { return creaturecounts; } set { creaturecounts = value; OnPropertyChanged(); } }
-        public Dictionary<Landscape, int> LandscapeCounts { get { return landscapecounts; } set { landscapecounts = value; OnPropertyChanged(); } }
-        public Dictionary<Plant, int> PlantCounts { get { return plantcounts; } set { plantcounts= value; OnPropertyChanged(); } }
+        public Dictionary<Type, int> CreatureCounts { get { return creaturecounts; } set { creaturecounts = value; OnPropertyChanged(); } }
+        public Dictionary<Type, int> LandscapeCounts { get { return landscapecounts; } set { landscapecounts = value; OnPropertyChanged(); } }
+        public Dictionary<Type, int> PlantCounts { get { return plantcounts; } set { plantcounts= value; OnPropertyChanged(); } }
 
-        void GetCount<T>(T obj, List<T> list, Dictionary<T, int> dict)
+        void GetCount(Type type, List<Actor> list, Dictionary<Type, int> dict)
         {
-            Type type = obj.GetType();
             IList active = CreateList(type);
-            active = list.FindAll(i => i.GetType() == obj.GetType()).ToList();
-            dict.Add(obj, active.Count);
+            active = list.FindAll(i => i.GetType() == type).ToList();
+            dict.Add(type, active.Count);
         }
 
-        Dictionary<T, int> ResetCount<T>(List<T> type_list, List<T> active_list) where T : class
-        {
-            Type type = typeof(T);
-            Dictionary<T, int> dict = CreateDict<T, int>();
+        Dictionary<Type, int> ResetCount(List<Type> type_list, List<Actor> active_list)
+        { 
+            Dictionary<Type, int> dict = CreateDict<Type, int>();
 
             type_list.ForEach(a => GetCount(a, active_list, dict));
 
@@ -216,22 +118,21 @@ namespace PROG201_System_Project.systems
 
         void InitCounts()
         {
-            CreatureCounts = new Dictionary<Creature, int>();
-            LandscapeCounts = new Dictionary<Landscape, int>();
-            PlantCounts = new Dictionary<Plant, int>();
+            CreatureCounts = new Dictionary<Type, int>();
+            LandscapeCounts = new Dictionary<Type, int>();
+            PlantCounts = new Dictionary<Type, int>();
         }
 
         void GetCounts()
         {
-            CreatureCounts = ResetCount(CreatureTypes, ActiveCreatures);
-            LandscapeCounts = ResetCount(LandscapeTypes, ActiveLandscapes);
-            PlantCounts = ResetCount(PlantTypes, ActivePlants);
+            CreatureCounts = ResetCount(CreatureCache, ActiveCreatures);
+            LandscapeCounts = ResetCount(LandscapeCache, ActiveLandscapes);
+            PlantCounts = ResetCount(PlantCache, ActivePlants);
         }
         #endregion
 
         public Simulation(Grid grid, double interval) 
         {
-            GetAllTypes();
             InitCounts();
 
             DefaultInterval = TimeSpan.FromSeconds(interval);
@@ -246,42 +147,17 @@ namespace PROG201_System_Project.systems
             GetActorLists();
             GetCounts();
 
-            Weather = new Weather(ActiveLandscapes, ActivePlants);
+            Weather = new Weather(ActiveLandscapes.ConvertAll(l => (Landscape)l), ActivePlants.ConvertAll(p => (Plant)p));
 
             Start();
         }
 
         #region Actor Add
-        Actor GetActor(string type, string name)
+        public void FindActor(string content)
         {
-            Actor actor = new Actor();
-            Type actortype = actor.GetType();
-            switch (type)
-            {
-                case "Creature":
-                    actortype = CreatureTypes.Find(c => c.GetType().Name == name).GetType();
-                    break;
-                case "Landscape":
-                    actortype = LandscapeTypes.Find(c => c.GetType().Name == name).GetType();
-                    break;
-                case "Plant":
-                    actortype = PlantTypes.Find(c => c.GetType().Name == name).GetType();
-                    break;
-                default:
-                    actor = null;
-                    break;
-            }
+            Type type = ActorCache.Find(a => a.Name == content);
 
-            actor = (Actor)Activator.CreateInstance(actortype);
-
-            return actor;
-        }
-
-        public void FindActor(string groupname ,string content)
-        {
-            Actor type = ActorTypes.Find(a => a.GetType().Name == groupname);
-
-            NewActor = GetActor(type.GetType().Name, content);
+            NewActor = CreateInstance<Actor>(type);
         }
 
         public void AddActor(int y, int x)
@@ -414,19 +290,19 @@ namespace PROG201_System_Project.systems
 
         void PlantTick(Plant plant)
         {
-            plant.TickAction();
+            plant.TickAction(Board, Actors);
         }
 
         void CheckProcreators(List<Actor> actors, string season)
         {
-            List<IProcreate> procreators = new List<IProcreate>((IEnumerable<IProcreate>)actors.Where(a => ObjectIs<IProcreate>(a)));
+            List<IProcreate> procreators = actors.Where(a => ObjectIs<IProcreate>(a)).Cast<IProcreate>().ToList();
 
             procreators.ForEach(p => p.InSeason(season));
         }
 
         void CheckGestation(List<Actor> actors)
         {
-            List<IProcreate> procreators = new List<IProcreate>((IEnumerable<IProcreate>)actors.Where(a => ObjectIs<IProcreate>(a)));
+            List<IProcreate> procreators = actors.Where(a => ObjectIs<IProcreate>(a)).Cast<IProcreate>().ToList();
 
             procreators.Where(p => p.Gestating).ToList().ForEach(i => i.IncreaseGestation());
         }
@@ -442,7 +318,10 @@ namespace PROG201_System_Project.systems
 
                 WeatherType = Weather.CurrentType.ToString();
 
+                Weather.ApplySunlight();
+
                 CheckGestation(ValueList(Actors));
+                CheckProcreators(ValueList(Actors), CurrentSeason);
             }
 
             Weather.ApplyEvaporation();
@@ -450,17 +329,17 @@ namespace PROG201_System_Project.systems
 
             foreach(var actor in Actors.Values)
             {
-                if (ObjectIs<Creature>(actor))
+                if (actor is Creature)
                 {
                     CreatureTick((Creature)actor);
                 }
                 
-                if (ObjectIs<Landscape>(actor))
+                if (actor is Landscape)
                 {
                     LandscapeTick((Landscape)actor);
                 }
 
-                if(ObjectIs<Plant>(actor))
+                if(actor is Plant)
                 {
                     PlantTick((Plant)actor);
                 }
@@ -469,10 +348,8 @@ namespace PROG201_System_Project.systems
             GetActorLists();
             GetCounts();
 
-            CheckProcreators(ValueList(Actors), CurrentSeason);
-
-            Weather.SetLandscapes(ActiveLandscapes);
-            Weather.SetPlants(ActivePlants);
+            Weather.SetLandscapes(ActiveLandscapes.ConvertAll(l => (Landscape)l));
+            Weather.SetPlants(ActivePlants.ConvertAll(p => (Plant)p));
         }
         #endregion
     }

@@ -9,14 +9,33 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="images\arrow" />
+    <None Remove="images\bird.BMP" />
     <None Remove="images\default.BMP" />
+    <None Remove="images\hole.BMP" />
+    <None Remove="images\moth.BMP" />
+    <None Remove="images\rabbit.BMP" />
+    <None Remove="images\tree.BMP" />
     <None Remove="images\water.BMP" />
     <None Remove="images\yucca.BMP" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="images\arrow.bmp">
+    <Content Include="images\arrow.BMP">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\bird.BMP">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\hole.BMP">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\tree.BMP">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\rabbit.BMP">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\moth.BMP">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="images\water.BMP">

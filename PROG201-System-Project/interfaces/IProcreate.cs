@@ -17,17 +17,6 @@ namespace PROG201_System_Project.interfaces
 
         public ChromesomeType Chromesome { get; set; }
 
-        public enum BirthType
-        {
-            Live,
-            Eggs,
-            Seeds
-        };
-
-        public BirthType Birth { get; set; }
-
-        public Actor NearestMate { get; set; }
-
         public int MaxOffspring { get; set; }
         public List<Actor> Offspring { get; set; }
 
@@ -42,11 +31,10 @@ namespace PROG201_System_Project.interfaces
         public int Happy { get; set; }
 
         public string MatingSeason { get; set; }
-        public Actor BirthPlace { get; set; }
+        public Type BirthPlace { get; set; }
         public int BirthRange { get; set; }
 
         void InSeason(string season);
-        void IsGestating();
 
         void IncreaseHappy();
         void IncreaseGestation();
@@ -54,13 +42,13 @@ namespace PROG201_System_Project.interfaces
         void CheckHappy();
         void CheckGestation();
 
-        Actor FindNearestBirthPlace(Grid grid, Dictionary<Image, Actor> actors);
-        Actor FindNearestMate(Grid grid, Dictionary<Image, Actor> actors);
+        Actor FindNearestBirthPlace(Grid grid, Dictionary<int, Actor> actors);
+        Actor FindNearestMate(Grid grid, Dictionary<int, Actor> actors);
 
         void Procreate();
 
         void CreateOffspring(int amount);
 
-        void GiveBirth(Grid grid, Dictionary<Image, Actor> actors);
+        void GiveBirth(Grid grid, Dictionary<int, Actor> actors);
     }
 }

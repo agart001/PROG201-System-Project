@@ -1,10 +1,14 @@
 ﻿using PROG201_System_Project.interfaces;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
+using System.Windows.Resources;
 
 namespace PROG201_System_Project.actors.landscapes
 {
@@ -12,7 +16,8 @@ namespace PROG201_System_Project.actors.landscapes
     {
         public override void PreContruct()
         {
-            ActorID = 0;
+            GetRandomID();
+
             ImageFile = "water.BMP";
         }
 
@@ -47,7 +52,7 @@ namespace PROG201_System_Project.actors.landscapes
             CheckWater();
         }
 
-        public override void TickAction(Grid grid, Dictionary<Image, Actor> actors)
+        public override void TickAction(Grid grid, Dictionary<int, Actor> actors)
         {
             SpriteOpacity();
 

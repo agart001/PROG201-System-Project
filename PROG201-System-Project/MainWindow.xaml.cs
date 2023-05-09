@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static PROG201_System_Project.SimCache;
 
 namespace PROG201_System_Project
 {
@@ -27,6 +28,9 @@ namespace PROG201_System_Project
             UI = new UI(Main);
 
             UI.UpdatePage("game");
+
+            LoadImageCache();
+            GetTypeCache();
         }
     }
 }

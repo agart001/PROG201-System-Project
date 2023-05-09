@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -19,12 +20,15 @@ using PROG201_System_Project.actors.creatures;
 using PROG201_System_Project.actors.landscapes;
 using PROG201_System_Project.actors.plants;
 using PROG201_System_Project.interfaces;
+using static PROG201_System_Project.SimCache;
+using Image = System.Windows.Controls.Image;
 
 namespace PROG201_System_Project
 {
     internal static class Utility
     {
         public static Random Rand = new Random();
+
 
         public static void SetRandomSeed(double seed) => Rand = new Random((int)seed);
 
@@ -41,6 +45,15 @@ namespace PROG201_System_Project
             else { val += inc; }
         }
 
+        public static void Decrement(dynamic val, dynamic dec, dynamic min)
+        {
+            if (val - dec < min)
+            {
+                val = min;
+            }
+            else { val -= dec; }
+        }
+
         public static Brush BrushFromString(string str)
         {
             BrushConverter converter = new BrushConverter();
@@ -48,72 +61,22 @@ namespace PROG201_System_Project
             return brush;
         }
 
-        public static BitmapImage ImageFromString(string str)
-        {
-            string path = $"/../images/{str}";
-            Uri uri = new Uri(path, UriKind.Relative);
-            BitmapImage image = new BitmapImage(uri);
-            return image;
-        }
-
-        public static string ImageFileFromPath(string str)
-        {
-            char[] chars = str.ToCharArray();
-            char[] tofolder = chars.SkipWhile(i => i != 's').ToArray();
-            string folder = new string(tofolder);
-            char[] tofile = tofolder.SkipWhile(i => i != '/').ToArray();
-            tofile = tofile.Where(i => i != '/').ToArray();
-            string file = new string(tofile);
-            return file;
-        }
+        public static Image ImageFromCache(string key) => ImageCache[key];
 
         #region XML Load Actors
-        static Actor ParseLandscape(int id)
+        static Actor ParseActor(string type)
         {
             Actor actor = null;
-            switch (id)
-            {
-                case 0: actor = new Water(); break;
-            }
+            Type t = ActorCache.Find(a => a.Name == type);
+
+            if (t == null) return null;
+
+            actor = CreateInstance<Actor>(t);
 
             return actor;
         }
 
-        static Actor ParsePlant(int id)
-        {
-            Actor actor = null;
-            switch (id)
-            {
-                case 0: actor = new Yucca(); break;
-            }
-
-            return actor;
-        }
-
-        static Actor ParseCreature(int id)
-        {
-            Actor actor = null;
-            switch (id)
-            {
-                case 0: actor = new Moth(); break;
-            }
-
-            return actor;
-        }
-
-        static Actor ParseActor(int type, int id)
-        {
-            Actor actor = null;
-            switch(type)
-            {
-                case 0: actor = ParseLandscape(id); break;
-                case 1: actor = ParsePlant(id); break;
-                case 2: actor = ParseCreature(id); break;
-            }
-            return actor;
-        }
-
-        public static void LoadActorsXML(Grid grid, Dictionary<Image, Actor> actors)
+        public static void LoadActorsXML(Grid grid, Dictionary<int, Actor> actors)
         {
             string path = "../../../xml/actors.xml";
             XmlDocument xml = new XmlDocument();
@@ -123,10 +86,9 @@ namespace PROG201_System_Project
             xml.AppendChild(root);
             foreach (XmlElement actor in ActorList)
             {
-                int typeID = Convert.ToInt32(actor.GetAttribute("typeid"));
-                int actorID = Convert.ToInt32(actor.GetAttribute("actorid"));
+                string type = actor.GetAttribute("type");
 
-                Actor Actor = ParseActor(typeID, actorID);
+                Actor Actor = ParseActor(type);
 
                 if (Actor == null) return;
 
@@ -184,7 +146,7 @@ namespace PROG201_System_Project
         #endregion
 
         #region Create Numerable
-        public static O CreateInstance<O>(Type t) => (O)Activator.CreateInstance(t);
+        public static O CreateInstance<O>(Type t) => (O)Activator.CreateInstance(t.Assembly.FullName, t.FullName).Unwrap();
 
         public static IList CreateList(Type myType)
         {
@@ -211,6 +173,10 @@ namespace PROG201_System_Project
         public static IReadOnlyDictionary<K, V> CreateReadOnlyDict<K, V>(Dictionary<K, V> dict) => dict;
 
         public static IReadOnlyDictionary<K, V> CreateReadOnlyDict<K, V>(Dictionary<K, V> dict, Type type) => 
+            dict.Where(a => ObjectIs(a.Value, type)).
+                 ToDictionary(p => p.Key, p => p.Value);
+
+        public static IReadOnlyDictionary<K, V> CreateReadOnlyDict<K, V>(Dictionary<K, V> dict, string type) =>
             dict.Where(a => ObjectIs(a.Value, type)).
                  ToDictionary(p => p.Key, p => p.Value);
 
@@ -249,6 +215,18 @@ namespace PROG201_System_Project
 
             return confirm;
         }
+
+        public static bool ObjectIs(object obj, string type)
+        {
+            bool confirm = false;
+
+            if (obj.GetType().Name == type)
+            {
+                confirm = true;
+            }
+
+            return confirm;
+        }
         #endregion
     }
 
@@ -256,7 +234,10 @@ namespace PROG201_System_Project
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value.GetType().Name;
+            string str = value.ToString();
+            int dot = str.LastIndexOf(".");
+            string name = str.Remove(0, dot+1);
+            return name;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

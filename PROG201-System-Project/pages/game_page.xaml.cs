@@ -18,6 +18,7 @@ using PROG201_System_Project.actors.landscapes;
 using PROG201_System_Project.actors.plants;
 using PROG201_System_Project.systems;
 using static PROG201_System_Project.Utility;
+using static PROG201_System_Project.SimCache;
 
 namespace PROG201_System_Project.pages
 {
@@ -30,9 +31,10 @@ namespace PROG201_System_Project.pages
         public game_page()
         {
             InitializeComponent();
-            Sim = new Simulation(grd_Board, 1);
 
-            
+            Dictionary<string, Image> images = ImageCache;
+
+            Sim = new Simulation(grd_Board, 1);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -57,7 +59,7 @@ namespace PROG201_System_Project.pages
             string groupname = (string)button.GroupName;
             string content = (string)button.Content;
 
-            Sim.FindActor(groupname, content);
+            Sim.FindActor(content);
         }
 
         private void Add_Click(object sender, RoutedEventArgs e)

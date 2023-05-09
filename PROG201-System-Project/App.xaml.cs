@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using static PROG201_System_Project.Utility;
 
 namespace PROG201_System_Project
 {
@@ -13,5 +14,6 @@ namespace PROG201_System_Project
     /// </summary>
     public partial class App : Application
     {
+
     }
 }

@@ -45,18 +45,12 @@ namespace PROG201_System_Project.actors.creatures
         public int MaxHunger { get; set; }
         public double Hunger { get; set; }
         public double HungerMR { get; set; }
-        public IFood PreferredFood { get; set; }
+        public Type PreferredFood { get; set; }
 
-
-        public override void ParentPreConstruct()
-        {
-            TypeID = 2;
-        }
         #endregion
 
         #region IProcreate
         private ChromesomeType chromesome; public ChromesomeType Chromesome { get => chromesome; set => chromesome = value; }
-        private BirthType birth; public BirthType Birth { get => birth; set => birth = value; }
         private int maxoffspring; public int MaxOffspring { get => maxoffspring; set => maxoffspring = value; }
 
         private List<Actor> offspring; public List<Actor> Offspring { get => offspring; set => offspring = value; }
@@ -73,7 +67,7 @@ namespace PROG201_System_Project.actors.creatures
         private int happy; public int Happy { get => happy; set => happy = value; }
 
         private string matingseason; public string MatingSeason { get => matingseason; set => matingseason = value; }
-        private Actor birthplace; public Actor BirthPlace { get => birthplace; set => birthplace = value; }
+        private Type birthplace; public Type BirthPlace { get => birthplace; set => birthplace = value; }
         private int birthrange; public int BirthRange { get => birthrange; set => birthrange = value; }
 
         public void InSeason(string season)
@@ -81,6 +75,10 @@ namespace PROG201_System_Project.actors.creatures
             if(MatingSeason == season)
             {
                 ReadyToMate = true;
+            }
+            else
+            {
+                ReadyToMate = false;
             }
 
         }
@@ -105,15 +103,15 @@ namespace PROG201_System_Project.actors.creatures
 
         public void CheckGestation() => ReadyToDeliver = Gestation.Equals(MaxGestation);
 
-        public Actor FindNearestBirthPlace(Grid grid, Dictionary<Image, Actor> actors) => FindNearest(BirthPlace, CreateReadOnlyDict(actors, BirthPlace.GetType()));
+        public Actor FindNearestBirthPlace(Grid grid, Dictionary<int, Actor> actors) => FindNearest(CreateReadOnlyDict(actors, BirthPlace));
 
-        public Actor FindNearestMate(Grid grid, Dictionary<Image, Actor> actors)
+        public Actor FindNearestMate(Grid grid, Dictionary<int, Actor> actors)
         {
             Type type = GetType();
             switch(Chromesome)
             {
-                case ChromesomeType.X: return FindNearest(this, CreateReadOnlyDict(actors, type, this, a => a.Chromesome == ChromesomeType.Y));
-                case ChromesomeType.Y: return FindNearest(this, CreateReadOnlyDict(actors, type, this, a => a.Chromesome == ChromesomeType.X));
+                case ChromesomeType.X: return FindNearest(CreateReadOnlyDict(actors, type, this, a => a.Chromesome == ChromesomeType.Y));
+                case ChromesomeType.Y: return FindNearest(CreateReadOnlyDict(actors, type, this, a => a.Chromesome == ChromesomeType.X));
                 default: return null;
             }
         }
@@ -129,12 +127,12 @@ namespace PROG201_System_Project.actors.creatures
 
         public void Procreate()
         {
-            if (Chromesome == ChromesomeType.Y) return;
+            if (Chromesome == ChromesomeType.X) return;
 
             CreateOffspring(Rand.Next(1, MaxOffspring));
         }
 
-        public void GiveBirth(Grid grid, Dictionary<Image, Actor> actors)
+        public void GiveBirth(Grid grid, Dictionary<int, Actor> actors)
         {
             foreach(Actor offspring in Offspring)
             {
@@ -276,10 +274,10 @@ namespace PROG201_System_Project.actors.creatures
 
         void CheckEaten()
         {
-            if (Eaten) Alive = false;
+            if (Eaten) Alive = false
         }
 
-        void CheckAlive(Grid grid, Dictionary<Image, Actor> actors)
+        void CheckAlive(Grid grid, Dictionary<int, Actor> actors)
         {
             if (!Alive)
             {
@@ -297,9 +295,9 @@ namespace PROG201_System_Project.actors.creatures
         #endregion
 
         #region Pathing
-        public Water FindNearestWater(Grid grid, Dictionary<Image, Actor> actors) => FindNearest(new Water(), CreateReadOnlyDict(actors, typeof(Water)));
+        public Water FindNearestWater(Grid grid, Dictionary<int, Actor> actors) => (Water)FindNearest(CreateReadOnlyDict(actors, typeof(Water)));
 
-        public IFood FindNearestFood(Grid grid, Dictionary<Image, Actor> actors) => FindNearest(PreferredFood, CreateReadOnlyDict(actors, PreferredFood.GetType()));
+        public IFood FindNearestFood(Grid grid, Dictionary<int, Actor> actors) => (IFood)FindNearest(CreateReadOnlyDict(actors, PreferredFood));
 
         #endregion
 
@@ -338,17 +336,10 @@ namespace PROG201_System_Project.actors.creatures
         void EatCreature(IFood food)
         {
             Creature creature = food as Creature;
-            if (creature.Health - AttackDamage >= 0)
-            {
-                creature.Eaten = true;
-                Increment(Hunger, creature.Calories, MaxHunger);
-            }
-            else
-            {
-                creature.Health -= AttackDamage;
-            }
+            Increment(Hunger, creature.Calories, MaxHunger);
+            creature.Eaten = true;
 
-            CheckEaten();
+            creature.CheckEaten();
         }
 
         void EatVegetation(IFood food)
@@ -365,8 +356,10 @@ namespace PROG201_System_Project.actors.creatures
         }
         #endregion
 
-        public override void TickAction(Grid grid, Dictionary<Image, Actor> actors)
+        public override void TickAction(Grid grid, Dictionary<int, Actor> actors)
         {
+            CheckAlive(grid, actors);
+
             GetCurrentPosition();
 
             ApplyMR();
@@ -375,11 +368,6 @@ namespace PROG201_System_Project.actors.creatures
             CheckAlive(grid, actors);
 
             if (!Alive) return;
-
-            if(!Thirsty && !Hungery)
-            {
-                MoveRandom(grid);
-            }
 
             if (ReadyToDeliver)
             {
@@ -404,6 +392,14 @@ namespace PROG201_System_Project.actors.creatures
                 IFood NearestFood = FindNearestFood(grid, actors);
                 MoveThenExcute(NearestFood, () => Eat(NearestFood), grid);
             }
+
+            bool[] status = new bool[] { Hungery, Thirsty, LookForMate, ReadyToDeliver };
+            if (status.All(i => i == false))
+            {
+                MoveRandom(grid);
+            }
+
+            CheckAlive(grid, actors);
         }
     }
 }

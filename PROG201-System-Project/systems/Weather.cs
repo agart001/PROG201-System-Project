@@ -30,7 +30,7 @@ namespace PROG201_System_Project.systems
         #endregion
 
         int MaxSunlight = 10;
-        public double CurrentSunlight { get; set; }
+        public int CurrentSunlight { get; set; }
 
         public double PercipationValue { get; set; }
         public double EvaporationValue { get; set; }
@@ -45,7 +45,7 @@ namespace PROG201_System_Project.systems
 
 
 
-        #region Percipation
+        #region Percipation / Evaporation
         double GetPercipationChance(string currentseason)
         {
             switch(currentseason)
@@ -115,7 +115,7 @@ namespace PROG201_System_Project.systems
             }
         }
 
-        WeatherType GetType(string currentseason,double chance)
+        WeatherType GetWeatherType(string currentseason,double chance)
         {
             switch (currentseason)
             {
@@ -150,27 +150,48 @@ namespace PROG201_System_Project.systems
         public void ApplyEvaporation()
         {
             if (EvaporationValue == 0) return;
-            foreach(Landscape landscape in Landscapes)
-            {
-                landscape.DecrementWaterLevel(EvaporationValue);
-            }
+
+            Landscapes.ForEach(landscape => landscape.DecrementWaterLevel(EvaporationValue));
+            Plants.ForEach(plant => plant.DecreaseWater(EvaporationValue));
         }
 
         public void ApplyPercipation()
         {
             if (PercipationValue == 0) return;
-            foreach (Landscape landscape in Landscapes)
+            Landscapes.ForEach(landscape => landscape.IncrementWaterLevel(PercipationValue));
+            Plants.ForEach(plant => plant.IncreaseWater(PercipationValue));
+        }
+        #endregion
+
+        #region Sunlight
+        
+        int GetSunlightLevel()
+        {
+            switch(CurrentType)
             {
-                landscape.IncrementWaterLevel(PercipationValue);
+                case WeatherType.Sunny: return 8;
+                case WeatherType.Rainy: return 3;
+                case WeatherType.Gloomy: return 6;
+                case WeatherType.Brisk: return 7;
+                case WeatherType.Chilly: return 4;
+                default: return 0;
             }
         }
+
+        public void ApplySunlight()
+        {
+            Plants.ForEach(plant => plant.SetSunRecieved(CurrentSunlight));
+        }
+
         #endregion
 
         public void TickAction(string currentseason)
         {
             PercipationChance = GetPercipationChance(currentseason);
 
-            CurrentType = GetType(currentseason, PercipationChance);
+            CurrentType = GetWeatherType(currentseason, PercipationChance);
+
+            CurrentSunlight = GetSunlightLevel();
 
             GetPerAndEvapValue(CurrentType);
         }

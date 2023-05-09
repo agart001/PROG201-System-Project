@@ -18,11 +18,6 @@ namespace PROG201_System_Project.actors.landscapes
         public int VegetationLevel { get; set; }
         public bool VegetationDepleted { get; set; }
 
-        public override void ParentPreConstruct()
-        {
-            TypeID = 0;
-        }
-
         #region Water Control
         public void DecrementWaterLevel(double value)
         {
@@ -47,7 +42,7 @@ namespace PROG201_System_Project.actors.landscapes
             if (WaterLevel <= 0) WaterDepleted = true;
         }
 
-        public void DepletedWater(Grid grid, Dictionary<Image, Actor> actors)
+        public void DepletedWater(Grid grid, Dictionary<int, Actor> actors)
         {
             if (WaterDepleted)
             {
@@ -57,7 +52,7 @@ namespace PROG201_System_Project.actors.landscapes
         #endregion
 
         public virtual void CheckDepletion() { }
-        public virtual void Depleted(Grid grid, Dictionary<Image, Actor> actors) 
+        public virtual void Depleted(Grid grid, Dictionary<int, Actor> actors) 
         {
             DepletedWater(grid, actors);
         }
