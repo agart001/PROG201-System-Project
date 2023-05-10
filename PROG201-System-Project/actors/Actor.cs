@@ -149,7 +149,7 @@ namespace PROG201_System_Project
         public bool IsType(Type type)
         {
             bool confirm = false;
-            if (this.GetType().IsSubclassOf(type))
+            if (GetType().IsSubclassOf(type))
             {
                 confirm = true;
             }
