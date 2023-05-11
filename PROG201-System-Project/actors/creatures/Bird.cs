@@ -37,14 +37,14 @@ namespace PROG201_System_Project.actors.creatures
             Health = 15;
             AttackDamage = 2;
 
-            MaxHydration = 20;
-            Hydration = 20;
-            HydrationMR = .2;
+            MaxHydration = 15;
+            Hydration = 15;
+            HydrationMR = .15;
             WaterIntake = 5;
 
-            MaxHunger = 20;
-            Hunger = 20;
-            HungerMR = .2;
+            MaxHunger = 25;
+            Hunger = 25;
+            HungerMR = .25;
             PreferredFood = typeof(Moth);
             #endregion
 

@@ -39,12 +39,12 @@ namespace PROG201_System_Project.actors.creatures
 
             MaxHydration = 20;
             Hydration = 20;
-            HydrationMR = .2;
+            HydrationMR = .45;
             WaterIntake = 5;
 
-            MaxHunger = 20;
-            Hunger = 20;
-            HungerMR = .2;
+            MaxHunger = 25;
+            Hunger = 25;
+            HungerMR = .45;
             PreferredFood = typeof(Yucca);
             #endregion
 

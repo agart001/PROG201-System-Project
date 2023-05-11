@@ -375,8 +375,8 @@ namespace PROG201_System_Project.systems
             GetActorLists();
             GetCounts();
 
-            Weather.SetLandscapes(ActiveLandscapes.ConvertAll(l => (Landscape)l));
-            Weather.SetPlants(ActivePlants.ConvertAll(p => (Plant)p));
+            Weather.SetLandscapes(ActiveLandscapes.Cast<Landscape>().ToList());
+            Weather.SetPlants(ActivePlants.Cast<Plant>().ToList());
         }
         #endregion
     }
