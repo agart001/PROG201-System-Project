@@ -21,6 +21,8 @@ namespace PROG201_System_Project
     /// </summary>
     public partial class MainWindow : Window
     {
+        //Source: https://stackoverflow.com/questions/5411694/get-all-inherited-classes-of-an-abstract-class
+        //Source: https://stackoverflow.com/questions/972636/casting-a-variable-using-a-type-variable
         public static UI UI { get; set; }
         public MainWindow()
         {

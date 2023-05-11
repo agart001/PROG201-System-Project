@@ -38,12 +38,12 @@ namespace PROG201_System_Project.actors.creatures
             AttackDamage = 2;
 
             MaxHydration = 10;
-            Hydration = 10;
+            Hydration = Rand.Next(MaxHydration/2, MaxHydration);
             HydrationMR = .1;
             WaterIntake = 5;
 
             MaxHunger = 10;
-            Hunger = 10;
+            Hunger = Rand.Next(MaxHunger / 2, MaxHunger);
             HungerMR = .1;
             PreferredFood = typeof(Yucca);
             #endregion

@@ -42,7 +42,6 @@ namespace PROG201_System_Project
                 Assembly.GetAssembly(typeof(Actor)).GetTypes()
                 .Where(myType => myType.IsSubclassOf(typeof(Actor))))
             {
-                //actors.Add((Actor)Activator.CreateInstance(type));
                 types.Add(type);
             }
             
